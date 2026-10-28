@@ -16,7 +16,11 @@ online and decides after execution whether **one more call is worth its cost**.
 
 ## Results (20 seeds, held-out query phrasings)
 
-Mean [95% bootstrap CI over seeds]. Cost is in milli-USD per *successful* task.
+Mean [95% bootstrap CI over seeds]. **Cost** is a *simulated* per-call tool price (e.g. calculator $0.0001,
+replica SQL $0.0005, web search $0.002–0.008, licensed market-data API $0.01; see
+[benchmarks/simulator/env.py](benchmarks/simulator/env.py)), summed over the calls a router makes and divided by
+the number of tasks it answered correctly. It is reported in milli-USD (1 m$ = $0.001). No paid APIs or LLMs are used
+anywhere in this project, so no real money is spent running it.
 
 | Router | E1 stationary: success | E1: cost / success | E2 drift: success | E2: cost / success |
 |---|---|---|---|---|
