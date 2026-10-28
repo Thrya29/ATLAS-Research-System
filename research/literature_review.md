@@ -57,7 +57,7 @@ No surveyed work jointly addresses all of the following for **heterogeneous tool
    always calling more or never verifying.
 6. **Learning from task-level feedback only.** Per-tool correctness is not observed, so credit has to be assigned.
 
-ATLAS's contribution is an integrated, testable instantiation of (1)–(6). Section 6 of the results
+ATLAS's contribution is an integrated, testable instantiation of (1)–(6). The ablation study (E3) in the results
 (`benchmarks/reports/RESULTS.md`) measures how much each part contributes. **We do not claim** that any single
 ingredient (Thompson sampling, discounting, branch-and-bound, VoI) is new. The claim is about the formulation and its
 empirical behaviour in a controlled, reproducible environment.

@@ -60,7 +60,7 @@ p-value with Holm correction inside each table, and $d_z$ = mean difference / SD
 
 ```bash
 pip install -e ".[dev]"
-python -m benchmarks.experiments.run_all --workers 5     # all experiments, seeds 1-20 (~1 h on 6 cores)
+python -m benchmarks.experiments.run_all --workers 5     # all experiments, seeds 1-20 (~26 min on 6 cores; resumable)
 python -m benchmarks.experiments.report                  # RESULTS.md + figures
 python -m benchmarks.experiments.run_all --quick         # 3 seeds, ~13 min
 ```
