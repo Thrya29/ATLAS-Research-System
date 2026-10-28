@@ -1,0 +1,9 @@
+.venv
+.git
+**/__pycache__
+.pytest_cache
+.hypothesis
+benchmarks/reports
+data/warehouse.db
+data/state
+tests

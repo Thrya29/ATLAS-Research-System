@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+data/warehouse.db
+data/state/
+benchmarks/reports/shards*/
+*.egg-info/
+.coverage
+htmlcov/
+benchmarks/reports/*.log

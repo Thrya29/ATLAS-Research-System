@@ -1,0 +1,7 @@
+2026-10-27T10:01:02Z checkout ERROR PaymentGatewayTimeout: upstream payments gateway did not respond in 2000ms
+2026-10-27T10:01:05Z checkout ERROR HTTP 500 POST /checkout/confirm pool exhausted (max=50)
+2026-10-27T10:02:11Z auth INFO token refresh ok
+2026-10-27T10:03:40Z checkout WARN retry queue disabled; dropping payment retry
+2026-10-27T10:04:12Z search INFO reindex completed in 412s
+2026-10-27T10:05:59Z billing ERROR invoice render failed: template missing field tax_id
+2026-10-27T10:06:30Z checkout ERROR HTTP 500 POST /checkout/confirm pool exhausted (max=50)
