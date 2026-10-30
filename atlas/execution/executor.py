@@ -29,6 +29,7 @@ from atlas.core.types import (
     ToolResult,
     ToolSpec,
 )
+from atlas.execution.cache import serve, source_of, virtual_spec
 from atlas.execution.circuit import CircuitBreakers
 
 Invoke = Callable[[ToolSpec, Mapping[str, ToolResult], int], Awaitable[ToolResult]]
@@ -95,9 +96,14 @@ class Executor:
         self, step: PlanStep, inputs: Mapping[str, ToolResult], ctx: RequestContext
     ) -> tuple[list[ToolResult], float]:
         """Run one step with retries. Returns all attempt results and elapsed ms."""
-        spec = self.tools[step.tool]
+        spec = self._spec(step.tool)
         if not spec.allowed_for(ctx.role):
             return [ToolResult(spec.name, False, 0.0, failure=FailureKind.POLICY_DENIED)], 0.0
+        if step.cached is not None:  # planned cache hit: no call, no breaker update
+            res = serve(step.tool, step.cached)
+            if self.on_result:
+                self.on_result(res)
+            return [res], res.duration_ms
         out: list[ToolResult] = []
         elapsed = 0.0
         for attempt in range(self.retry.max_retries + 1):
@@ -141,7 +147,7 @@ class Executor:
             current: PlanStep | None = step
             start = 0.0
             while current is not None:
-                spec = self.tools[current.tool]
+                spec = self._spec(current.tool)
                 tried.add(spec.name)
                 if current is not step:
                     steps.append(current)
@@ -174,7 +180,7 @@ class Executor:
         return report
 
     async def _run_followup(self, step, ctx, base, results, steps, avail, ends) -> None:
-        spec = self.tools[step.tool]
+        spec = self._spec(step.tool)
         steps.append(step)
         inputs = {}
         for r in spec.requires:
@@ -189,10 +195,14 @@ class Executor:
             for t in spec.provides:
                 avail.setdefault(t, []).append((attempts[-1], base + elapsed))
 
+    def _spec(self, name: str) -> ToolSpec:
+        src = source_of(name)
+        return self.tools[name] if src is None else virtual_spec(self.tools[src])
+
     def _report(self, results, steps, avail, ends) -> ExecutionReport:
         supplied = {t: max(v, key=lambda x: (x[0].confidence or 0.0, -x[1]))[0] for t, v in avail.items()}
         cost = sum(
-            self.tools[r.tool].cost
+            self._spec(r.tool).cost
             for r in results
             if r.failure not in (FailureKind.CIRCUIT_OPEN, FailureKind.POLICY_DENIED, FailureKind.DEPENDENCY_FAILED)
         )

@@ -195,3 +195,70 @@ d_z is the paired standardised mean difference.
 | ATLAS q>=0.9 V=0.2 | 0.904 | 5.41 | 1.95 | 1369 |
 
 ![pareto](figures/e5_pareto.png)
+
+## E7 — Result caching under drift (repeated queries, volatile answers)
+
+| Router | Task success | Cost / success (m$) | Tool calls / task | Cache hits / task | Latency p95 (ms) |
+|---|---|---|---|---|---|
+| no cache | 0.890 [0.888, 0.892] | 4.64 [4.59, 4.69] | 1.88 [1.86, 1.91] | 0.00 [0.00, 0.00] | 1366 [1344, 1386] |
+| fixed-TTL cache | 0.816 [0.813, 0.820] | 3.45 [3.37, 3.52] | 1.30 [1.28, 1.32] | 0.64 [0.63, 0.65] | 1261 [1234, 1283] |
+| learned cache | 0.881 [0.879, 0.884] | 3.63 [3.57, 3.68] | 1.46 [1.45, 1.47] | 0.45 [0.44, 0.46] | 1261 [1243, 1279] |
+
+### Learned cache vs the other modes (E7)
+
+| learned cache vs | Metric | Δ (ref − other) [95% CI] | Holm p | d_z |
+|---|---|---|---|---|
+| no cache | Task success | -0.008 [-0.010, -0.007] | 0.012 | -2.66 |
+| no cache | Cost / success (m$) | -1.01 [-1.05, -0.97] | 0.012 | -14.95 |
+| no cache | Tool calls / task | -0.42 [-0.45, -0.39] | 0.012 | -8.26 |
+| fixed-TTL cache | Task success | 0.065 [0.062, 0.068] | 0.012 | 11.13 |
+| fixed-TTL cache | Cost / success (m$) | 0.19 [0.14, 0.23] | 0.012 | 2.37 |
+| fixed-TTL cache | Tool calls / task | 0.16 [0.14, 0.18] | 0.012 | 5.43 |
+
+## E8 — LLM-as-router baseline (local Qwen2.5-0.5B picks the tools)
+
+Seeds 1–10. The LLM's own routing time (median 902 ms per query on CPU) is *not* included in the latency columns below.
+
+### Stationary
+
+| Router | Task success | Cost / success (m$) | Tool calls / task | Unnecessary calls / task | Latency p50 (ms) | Latency p95 (ms) |
+|---|---|---|---|---|---|---|
+| ATLAS | 0.908 [0.905, 0.911] | 4.27 [4.16, 4.37] | 1.89 [1.85, 1.92] | 0.371 [0.345, 0.396] | 262 [245, 280] | 932 [906, 956] |
+| B2 Supervised model | 0.833 [0.829, 0.838] | 4.01 [3.96, 4.06] | 1.53 [1.52, 1.54] | 0.115 [0.111, 0.118] | 178 [176, 182] | 678 [674, 683] |
+| B5 Contextual bandit | 0.838 [0.835, 0.842] | 4.26 [4.20, 4.33] | 1.58 [1.57, 1.59] | 0.115 [0.111, 0.118] | 209 [203, 215] | 752 [741, 762] |
+| B6 LLM router (Qwen 0.5B) | 0.426 [0.420, 0.434] | 11.97 [11.77, 12.12] | 2.05 [2.04, 2.05] | 1.325 [1.319, 1.333] | 284 [282, 286] | 636 [627, 647] |
+
+
+| ATLAS vs | Metric | Δ (ref − other) [95% CI] | Holm p | d_z |
+|---|---|---|---|---|
+| B2 Supervised model | Task success | 0.075 [0.072, 0.079] | 0.018 | 12.26 |
+| B2 Supervised model | Cost / success (m$) | 0.26 [0.20, 0.33] | 0.018 | 2.31 |
+| B2 Supervised model | Tool calls / task | 0.36 [0.33, 0.39] | 0.018 | 7.47 |
+| B5 Contextual bandit | Task success | 0.070 [0.066, 0.075] | 0.018 | 9.16 |
+| B5 Contextual bandit | Cost / success (m$) | 0.01 [-0.09, 0.12] | 0.92 | 0.05 |
+| B5 Contextual bandit | Tool calls / task | 0.30 [0.27, 0.33] | 0.018 | 5.65 |
+| B6 LLM router (Qwen 0.5B) | Task success | 0.482 [0.476, 0.487] | 0.018 | 51.30 |
+| B6 LLM router (Qwen 0.5B) | Cost / success (m$) | -7.69 [-7.82, -7.56] | 0.018 | -34.06 |
+| B6 LLM router (Qwen 0.5B) | Tool calls / task | -0.16 [-0.19, -0.13] | 0.018 | -2.77 |
+
+### Drift
+
+| Router | Task success | Cost / success (m$) | Tool calls / task | Unnecessary calls / task | Latency p50 (ms) | Latency p95 (ms) |
+|---|---|---|---|---|---|---|
+| ATLAS | 0.890 [0.888, 0.892] | 4.64 [4.59, 4.69] | 1.88 [1.86, 1.91] | 0.374 [0.355, 0.392] | 277 [266, 289] | 1366 [1344, 1386] |
+| B2 Supervised model | 0.725 [0.718, 0.731] | 4.55 [4.47, 4.61] | 1.50 [1.49, 1.51] | 0.113 [0.109, 0.117] | 214 [211, 217] | 1487 [1459, 1517] |
+| B5 Contextual bandit | 0.805 [0.802, 0.807] | 4.53 [4.47, 4.60] | 1.57 [1.56, 1.58] | 0.115 [0.112, 0.119] | 216 [212, 220] | 1253 [1217, 1285] |
+| B6 LLM router (Qwen 0.5B) | 0.419 [0.413, 0.426] | 12.00 [11.84, 12.14] | 1.98 [1.97, 1.99] | 1.262 [1.255, 1.270] | 257 [255, 259] | 729 [716, 743] |
+
+
+| ATLAS vs | Metric | Δ (ref − other) [95% CI] | Holm p | d_z |
+|---|---|---|---|---|
+| B2 Supervised model | Task success | 0.165 [0.160, 0.171] | 0.018 | 17.54 |
+| B2 Supervised model | Cost / success (m$) | 0.10 [0.07, 0.12] | 0.018 | 1.91 |
+| B2 Supervised model | Tool calls / task | 0.39 [0.36, 0.41] | 0.018 | 10.81 |
+| B5 Contextual bandit | Task success | 0.085 [0.082, 0.087] | 0.018 | 18.40 |
+| B5 Contextual bandit | Cost / success (m$) | 0.11 [0.06, 0.16] | 0.018 | 1.21 |
+| B5 Contextual bandit | Tool calls / task | 0.31 [0.29, 0.34] | 0.018 | 8.02 |
+| B6 LLM router (Qwen 0.5B) | Task success | 0.471 [0.465, 0.476] | 0.018 | 50.49 |
+| B6 LLM router (Qwen 0.5B) | Cost / success (m$) | -7.36 [-7.48, -7.23] | 0.018 | -35.30 |
+| B6 LLM router (Qwen 0.5B) | Tool calls / task | -0.10 [-0.12, -0.07] | 0.018 | -2.33 |

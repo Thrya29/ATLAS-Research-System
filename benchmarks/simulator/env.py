@@ -20,6 +20,10 @@ from atlas.core.types import FailureKind, ToolResult, ToolSpec
 from benchmarks.simulator.tasks import Task
 
 DIRECT_ANSWER_QUALITY = 0.95
+# Answers to these families change over time: a cached answer is wrong once it is
+# older than ANSWER_LIFETIME tasks (E7). Other answers stay valid.
+VOLATILE_FAMILIES = frozenset({"kpi_today", "stock_quote", "breaking_news", "market_compare"})
+ANSWER_LIFETIME = 100
 
 
 @dataclass(frozen=True)
@@ -279,14 +283,24 @@ class SimEnvironment:
         # Correctness is a property of (task, tool), independent of retries.
         qr = self._rng("quality", task.id, spec.name)
         own = qr.random() < p.q(task.family)
-        correct = own and all(r.meta.get("correct", False) for r in inputs.values())
+        correct = own and all(self._valid(task, r) for r in inputs.values())
         conf = float(qr.beta(6, 2) if correct else qr.beta(2, 4))
-        return ToolResult(spec.name, True, latency, output=f"<{spec.name}:{task.id}>", confidence=conf, meta={"correct": correct})
+        return ToolResult(
+            spec.name, True, latency, output=f"<{spec.name}:{task.id}>", confidence=conf, meta={"correct": correct, "t": t}
+        )
 
     def grade(self, task: Task, supplied: Mapping[str, ToolResult]) -> bool:
         if not task.required:
             return bool(self._rng("direct", task.id).random() < DIRECT_ANSWER_QUALITY)
-        return all(t in supplied and supplied[t].meta.get("correct", False) for t in task.required)
+        return all(t in supplied and self._valid(task, supplied[t]) for t in task.required)
+
+    @staticmethod
+    def _valid(task: Task, r: ToolResult) -> bool:
+        """Correct when produced, and (if served from a cache) not stale for this task."""
+        if not r.meta.get("correct", False):
+            return False
+        stale = r.meta.get("cached") and task.family in VOLATILE_FAMILIES and task.id - r.meta.get("t", task.id) > ANSWER_LIFETIME
+        return not stale
 
 
 def distractor_profiles(n: int, seed: int = 0) -> list[Profile]:

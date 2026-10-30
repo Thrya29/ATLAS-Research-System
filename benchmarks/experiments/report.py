@@ -217,7 +217,7 @@ def fig_scaling(e4: dict) -> str:
 
 def main() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
-    e1, e2, e3, e4, e5 = (load(k) for k in ("E1", "E2", "E3", "E4", "E5"))
+    e1, e2, e3, e4, e5, e7, e8 = (load(k) for k in ("E1", "E2", "E3", "E4", "E5", "E7", "E8"))
     meta = json.loads((OUT / "run_meta.json").read_text()) if (OUT / "run_meta.json").exists() else {}
     md = [
         "# ATLAS — experimental results",
@@ -273,6 +273,25 @@ def main() -> None:
                 f"| {lab} | {v['success']:.3f} | {v['cost_per_success_musd']:.2f} | {v['calls_per_task']:.2f} | {v['latency_p95']:.0f} |"
             )
         md += ["", f"![pareto]({'figures/' + fig_pareto(e2, e5)})", ""]
+    if e7:
+        labels = list(e7)
+        cache_metrics = [*MAIN[:3], ("cache_hits_per_task", "Cache hits / task", "{:.2f}", +1), MAIN[5]]
+        md += ["## E7 — Result caching under drift (repeated queries, volatile answers)", ""] + table(e7, labels, cache_metrics)
+        md += ["", "### Learned cache vs the other modes (E7)", ""] + tests(e7, "learned cache", labels, MAIN[:3]) + [""]
+    if e8:
+        lat_file = OUT / "llm_router_latency.json"
+        lat = json.loads(lat_file.read_text()) if lat_file.exists() else {}
+        md += [
+            "## E8 — LLM-as-router baseline (local Qwen2.5-0.5B picks the tools)",
+            "",
+            f"Seeds 1–10. The LLM's own routing time (median {lat.get('median_ms', float('nan')):.0f} ms per query on CPU) "
+            "is *not* included in the latency columns below.",
+            "",
+        ]
+        for setting in ("stationary", "drift"):
+            sub = {lab.split("|")[0]: e8[lab] for lab in e8 if lab.endswith("|" + setting)}
+            md += [f"### {setting.capitalize()}", ""] + table(sub, list(sub), MAIN[:6])
+            md += ["", ""] + tests(sub, "ATLAS", list(sub), MAIN[:3]) + [""]
     (OUT / "RESULTS.md").write_text("\n".join(md), encoding="utf-8")
     print("wrote", OUT / "RESULTS.md")
 

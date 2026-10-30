@@ -45,6 +45,7 @@ class Record:
     fallback: int
     denied: int
     tool_failures: int
+    cache_hits: int
     latency_ms: float
     cost: float
     planning_ms: float
@@ -64,6 +65,7 @@ def unnecessary_calls(required: frozenset[str], report: ExecutionReport, registr
         r
         for r in report.results
         if r.failure not in (FailureKind.CIRCUIT_OPEN, FailureKind.POLICY_DENIED, FailureKind.DEPENDENCY_FAILED)
+        and not r.meta.get("cached")  # cache hits are not tool calls
     ]
     names = {r.tool for r in called}
     need = set(required)
@@ -120,6 +122,10 @@ def make_router(
         return ContextualBanditRouter(registry, u, seed)
     if name == "Oracle":
         return OracleRouter(registry, env, seed=seed)
+    if name == "B6":
+        from benchmarks.baselines.llm_router import LLMRouter, load_choices
+
+        return LLMRouter(registry, load_choices())
     return ATLASRouter(registry, u, cfg or ATLASConfig(), breakers, seed, name=name)
 
 
@@ -171,11 +177,17 @@ async def _run(
                 role=task.role,
                 success=ok,
                 calls=rep.calls
-                - sum(r.failure is FailureKind.POLICY_DENIED or r.failure is FailureKind.DEPENDENCY_FAILED for r in rep.results),
+                - sum(
+                    r.failure is FailureKind.POLICY_DENIED
+                    or r.failure is FailureKind.DEPENDENCY_FAILED
+                    or bool(r.meta.get("cached"))
+                    for r in rep.results
+                ),
                 unnecessary=unnecessary_calls(task.required, rep, registry),
                 verification=purposes.count("verification"),
                 fallback=purposes.count("fallback"),
                 denied=sum(r.failure is FailureKind.POLICY_DENIED for r in rep.results),
+                cache_hits=sum(bool(r.meta.get("cached")) for r in rep.results),
                 tool_failures=sum((not r.ok) and r.failure in (FailureKind.TIMEOUT, FailureKind.ERROR) for r in rep.results),
                 latency_ms=rep.latency_ms,
                 cost=rep.cost,

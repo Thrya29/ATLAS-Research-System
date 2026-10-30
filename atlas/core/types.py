@@ -68,6 +68,8 @@ class PlanStep:
     depends_on: tuple[int, ...] = ()
     purpose: str = "primary"
     """primary | fallback | verification — used for accounting and audit."""
+    cached: ToolResult | None = None
+    """For a ``cache:<tool>`` step: the answer to serve instead of calling the tool."""
 
 
 @dataclass

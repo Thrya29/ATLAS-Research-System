@@ -26,6 +26,7 @@ def aggregate(recs: list[Record], budget_ms: float) -> dict[str, float]:
         "unnecessary_rate": unnec.sum() / max(calls.sum(), 1),
         "verification_per_task": np.mean([r.verification for r in recs]),
         "fallback_per_task": np.mean([r.fallback for r in recs]),
+        "cache_hits_per_task": np.mean([getattr(r, "cache_hits", 0) for r in recs]),
         "denied_per_task": np.mean([r.denied for r in recs]),
         "tool_failure_rate": sum(r.tool_failures for r in recs) / max(calls.sum(), 1),
         "cost_per_task_musd": 1000 * cost.mean(),

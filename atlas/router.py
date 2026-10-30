@@ -47,6 +47,7 @@ from atlas.core.types import (
     ToolResult,
     ToolSpec,
 )
+from atlas.execution.cache import ResultCache, age_bucket, source_of, virtual_name, virtual_spec
 from atlas.execution.circuit import CircuitBreakers
 from atlas.planning.graph import build_plan, enumerate_plans
 from atlas.understanding.classifier import TaskUnderstanding
@@ -68,6 +69,10 @@ class ATLASConfig:
     explore: bool = True  # Thompson sampling (else posterior means)
     online: bool = True  # update statistics after deployment
     impute_superseded: bool = True  # A10: learn from answers superseded by verification
+    cache: str = "off"
+    """Result cache (E7): "off"; "fixed" = serve any fresh hit; "learned" = hits are planned as virtual tools."""
+    cache_max_age: float = 500.0
+    """Oldest cache entry ever served, in decisions."""
     uniform_policy: bool = False  # pick uniformly among candidate plans (offline logging policy)
     candidates_per_type: int = 4
     k_plans: int = 32
@@ -115,11 +120,26 @@ class ATLASRouter:
         self.now = 0
         self.stats: dict[str, ToolStats] = {}
         self.calibration = [DecayedBeta((i + 0.5) / CONF_BINS, gamma=self.cfg.gamma) for i in range(CONF_BINS)]
+        self.cache = ResultCache(clock=lambda: self.now, max_age=self.cfg.cache_max_age) if self.cfg.cache != "off" else None
+        self._virtual: dict[str, ToolSpec] = {}
+        self._age: dict[str, float] = {}  # virtual tool -> age of its cached answer, for this decision
+        self.freshness: dict[str, DecayedBeta] = {}
         self._frozen = False
         if name:
             self.name = name
 
     # ------------------------------------------------------------------ stats
+    def _lookup(self, name: str) -> ToolSpec | None:
+        """A registered tool, or the virtual ``cache:<tool>`` for a registered source."""
+        if name in self.registry:
+            return self.registry.get(name)
+        src = source_of(name)
+        if src is None or src not in self.registry:
+            return None
+        if name not in self._virtual:
+            self._virtual[name] = virtual_spec(self.registry.get(src))
+        return self._virtual[name]
+
     def _stats(self, spec: ToolSpec) -> ToolStats:
         s = self.stats.get(spec.name)
         if s is None:
@@ -138,6 +158,17 @@ class ATLASRouter:
     def _context(self, family: str | None) -> str | None:
         return family if self.cfg.contextual else None
 
+    def _freshness(self, family: str | None, age: float) -> DecayedBeta:
+        """P(a cached answer is still valid | task family, age bucket), shared by every tool's cache.
+
+        Staleness is a property of the question, not of the tool that answered it,
+        so all ``cache:*`` tools pool their evidence here.
+        """
+        key = f"{self._context(family) or '*'}|{age_bucket(age)}"
+        if key not in self.freshness:
+            self.freshness[key] = DecayedBeta(0.9, prior_strength=2.0, gamma=self.cfg.gamma_quality)
+        return self.freshness[key]
+
     def _draw(self, spec: ToolSpec, family: str | None, explore: bool) -> _Draw:
         st, now, ctx = self._stats(spec), self.now, self._context(family)
         explore = explore and self.cfg.explore and not spec.sensitive
@@ -145,7 +176,13 @@ class ATLASRouter:
             rel = st.reliability.sample(self.rng, now) if explore else st.reliability.mean(now)
         else:
             rel = 1 - spec.prior_failure
-        q = st.quality.sample(self.rng, ctx, now) if explore else st.quality.mean(ctx, now)
+        src = source_of(spec.name)
+        if src is not None and spec.name in self._age:
+            # Cached answer: right when produced (source tool's quality) and still valid (freshness).
+            qs, fr = self._stats(self.registry.get(src)).quality, self._freshness(family, self._age[spec.name])
+            q = qs.sample(self.rng, ctx, now) * fr.sample(self.rng, now) if explore else qs.mean(ctx, now) * fr.mean(now)
+        else:
+            q = st.quality.sample(self.rng, ctx, now) if explore else st.quality.mean(ctx, now)
         if self.cfg.learn_latency:
             if explore:
                 mu, sigma = st.latency.sample_mu(self.rng, now)
@@ -220,6 +257,7 @@ class ATLASRouter:
             return decision
 
         cands, rejected = self._candidates(ctx, family, needed)
+        hits = self._cache_candidates(query, cands, ctx) if self.cfg.cache == "learned" else {}
         decision.rejected = rejected
         decision.candidates = {t: [s.name for s in v] for t, v in cands.items()}
         draws = {s.name: self._draw(s, family, explore=True) for v in cands.values() for s in v}
@@ -254,11 +292,44 @@ class ATLASRouter:
             if best_key is None or key < best_key:
                 best, best_key = plan, key
         decision.plan = best or Plan(steps=[], feasible=False)
+        if self.cfg.cache == "fixed":
+            hits = self._substitute_cached(query, decision.plan)
+        for step in decision.plan.steps:
+            step.cached = hits.get(step.tool)
         decision.notes.append(
             "constraints satisfied" if decision.plan.feasible else "no plan met constraints; maximised on-time success"
         )
         decision.planning_ms = (time.perf_counter() - t0) * 1000
         return decision
+
+    def _cache_candidates(self, query: str, cands: dict[str, list[ToolSpec]], ctx: RequestContext) -> dict[str, ToolResult]:
+        """Learned caching: each fresh hit joins its types' candidates as a virtual tool."""
+        hits: dict[str, ToolResult] = {}
+        self._age = {}
+        for specs in cands.values():
+            for spec in list(specs):
+                if source_of(spec.name) is not None:
+                    continue
+                hit = self.cache.get(spec.name, query)
+                v = self._lookup(virtual_name(spec.name))
+                if hit is None or not v.allowed_for(ctx.role):
+                    continue
+                hits[v.name] = hit
+                self._age[v.name] = hit.meta["cache_age"]
+        for t, specs in cands.items():
+            specs.extend(self._lookup(n) for n in hits if t in self._lookup(n).provides and self._lookup(n) not in specs)
+        return hits
+
+    def _substitute_cached(self, query: str, plan: Plan) -> dict[str, ToolResult]:
+        """Fixed-TTL caching: any planned call with a fresh hit is served from the cache."""
+        hits: dict[str, ToolResult] = {}
+        for i, step in enumerate(plan.steps):
+            hit = self.cache.get(step.tool, query)
+            if hit is not None:
+                name = virtual_name(step.tool)
+                plan.steps[i] = PlanStep(name, step.supplies, (), step.purpose)
+                hits[name] = hit
+        return hits
 
     def _greedy(self, needed, cands, draws) -> list[frozenset[str]]:
         """A4 ablation: best provider per predicted type, ignoring dependencies."""
@@ -295,9 +366,22 @@ class ATLASRouter:
 
     # ---------------------------------------------------------------- learning
     def observe(self, decision: Decision, report: ExecutionReport, success: bool | None) -> None:
+        if self.cache is not None:
+            for res in report.results:
+                if res.ok and source_of(res.tool) is None:
+                    self.cache.put(res.tool, decision.query, res)
         if self._frozen or not self.cfg.online:
             return
         self._learn(decision, report, success)
+
+    def _learn_freshness(self, family: str | None, name: str, age: float, success: bool, w: float) -> None:
+        fr = self._freshness(family, age)
+        if success:
+            fr.update(1.0, self.now)
+        elif w > 0:
+            # A wrong cached answer was either wrong when produced or has gone stale: split the evidence.
+            q = self._stats(self.registry.get(source_of(name))).quality.mean(self._context(family), self.now)
+            fr.update(_posterior_valid(fr.mean(self.now), q), self.now, w)
 
     def warm_start(self, decision: Decision, report: ExecutionReport, success: bool | None) -> None:
         """Learn from offline logs regardless of the online/frozen settings."""
@@ -306,9 +390,10 @@ class ATLASRouter:
     def _learn(self, decision: Decision, report: ExecutionReport, success: bool | None) -> None:
         now = self.now
         for res in report.results:
-            if res.tool not in self.registry:
+            spec = self._lookup(res.tool)
+            if spec is None:
                 continue
-            st = self._stats(self.registry.get(res.tool))
+            st = self._stats(spec)
             if res.ok:
                 st.reliability.update(1.0, now)
                 st.latency.update(res.duration_ms, now)
@@ -322,9 +407,15 @@ class ATLASRouter:
         if not needed <= set(report.supplied):
             return  # execution failure, not an answer-quality signal
         ctx = self._context(decision.family)
+        ages = {r.tool: r.meta["cache_age"] for r in report.results if "cache_age" in r.meta}
         blame = _responsibilities(report, needed)
         for name, w in blame.items():
-            q = self._stats(self.registry.get(name)).quality
+            if self._lookup(name) is None:
+                continue
+            if name in ages:
+                self._learn_freshness(decision.family, name, ages[name], success, w)
+                continue
+            q = self._stats(self._lookup(name)).quality
             if success:
                 q.update(ctx, 1.0, now)
             elif w > 0:
@@ -335,11 +426,12 @@ class ATLASRouter:
             # the mistakes verification caught and inflates the tool's quality;
             # impute the calibrated probability of being correct instead.
             for res in report.results:
-                if not res.ok or res.confidence is None or res.tool in blame or res.tool not in self.registry:
+                spec = self._lookup(res.tool)
+                if not res.ok or res.confidence is None or res.tool in blame or spec is None or res.tool in ages:
                     continue
-                if self.registry.get(res.tool).provides & needed:
+                if spec.provides & needed:
                     p = self.calibration[_bin(res.confidence)].mean(now)
-                    self._stats(self.registry.get(res.tool)).quality.update(ctx, p, now)
+                    self._stats(spec).quality.update(ctx, p, now)
         for t in needed:
             res = report.supplied[t]
             if res.confidence is None:
@@ -347,6 +439,11 @@ class ATLASRouter:
             w = 1.0 if success else blame.get(res.tool, 0.0)
             if w > 0:
                 self.calibration[_bin(res.confidence)].update(1.0 if success else 0.0, now, w)
+
+
+def _posterior_valid(v: float, q: float) -> float:
+    """P(still valid | cached answer judged wrong), with P(valid)=v and P(right when produced)=q."""
+    return v * (1 - q) / max(1e-9, 1 - q * v)
 
 
 def _responsibilities(report: ExecutionReport, needed: frozenset[str]) -> dict[str, float]:

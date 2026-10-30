@@ -36,6 +36,7 @@ LABEL = {
     "B5": "B5 Contextual bandit",
     "ATLAS": "ATLAS",
     "Oracle": "Oracle (privileged)",
+    "B6": "B6 LLM router (Qwen 0.5B)",
 }
 BASE = ATLASConfig()
 ABLATIONS = {
@@ -51,6 +52,8 @@ ABLATIONS = {
     "A9 -exploration": replace(BASE, explore=False),
     "A10 -imputation": replace(BASE, impute_superseded=False),
 }
+
+CACHE_MODES = {"no cache": "off", "fixed-TTL cache": "fixed", "learned cache": "learned"}
 
 
 def _job(kind: str, label: str, router: str, seed: int, n: int, drift: bool, cfg: dict | None, ctx: dict | None, extra: int):
@@ -79,6 +82,13 @@ def jobs(only: set[str], seeds: list[int], quick: bool):
                 out += [
                     ("E4", f"{LABEL[r]}|{12 + extra}", r, s, 400 if quick else 600, False, None, None, extra) for s in seeds[:5]
                 ]
+    if "E8" in only:
+        for setting, n, drift in (("stationary", n1, False), ("drift", n2, True)):
+            for r in ["ATLAS", "B2", "B5", "B6"]:
+                out += [("E8", f"{LABEL[r]}|{setting}", r, s, n, drift, None, None, 0) for s in seeds[:10]]
+    if "E7" in only:
+        for label, mode in CACHE_MODES.items():
+            out += [("E7", label, "ATLAS", s, n2, True, asdict(replace(BASE, cache=mode)), None, 0) for s in seeds[:10]]
     if "E5" in only:
         for q in [0.6, 0.7, 0.8, 0.9]:
             for v in [0.01, 0.05, 0.2]:
@@ -103,7 +113,7 @@ def _done(shard_dir: Path) -> set[tuple]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
-    ap.add_argument("--only", default="E1,E2,E3,E4,E5")
+    ap.add_argument("--only", default="E1,E2,E3,E4,E5,E7")
     ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--shard", default=None, help="internal: i/N")
     ap.add_argument("--fresh", action="store_true", help="discard results of a previous, interrupted run")

@@ -118,3 +118,33 @@ pip install -e ".[llm]"
 ATLAS_LLM_MODEL=/path/to/qwen2.5-0.5b-instruct-q4_k_m.gguf python -m benchmarks.experiments.understanding --prepare
 python -m benchmarks.experiments.understanding
 ```
+
+## E7 — Learned result caching
+
+* **Stream:** the E2 drift stream (3000 tasks), seeds 1–10. Queries repeat naturally: about 970 unique questions across
+  10 seeds × 3000 tasks.
+* **Staleness:** answers to `kpi_today`, `stock_quote`, `breaking_news` and `market_compare` become wrong 100 tasks
+  after they were produced. Staleness also propagates to anything computed from a stale input. Other answers stay
+  valid. The cache never serves entries older than 500 decisions.
+
+| Variant | Behaviour |
+|---|---|
+| No cache | Every planned call goes to the tool |
+| Fixed-TTL | Any planned call with a fresh hit is served from the cache |
+| Learned | A hit is a candidate `cache:<tool>` with zero price and ~1 ms latency |
+
+In learned mode, a hit's estimated quality is the source tool's quality times a freshness term P(still valid | family,
+age bucket). The freshness term is shared across tools and learned from outcomes. A wrong cached answer splits its
+evidence between "wrong when produced" and "stale" by Bayes' rule. Cache hits are not counted as tool calls and cost
+nothing.
+
+## E8 — LLM-as-router baseline (B6)
+
+* **Model:** Qwen2.5-0.5B-Instruct (Q4_K_M) via llama.cpp on CPU.
+* **Prompt:** the tool catalogue (description, outputs, required inputs, role restrictions) and one training-phrased
+  example per family, labelled with the oracle's tool set.
+* **Decoding:** grammar-constrained to "none" or 1–3 real tool names.
+* **Caching:** choices are generated once per unique query (`benchmarks/experiments/llm_router.py`) and committed. The
+  routing runs therefore reproduce without the model.
+* **Comparison:** ATLAS, B2 and B5, on the stationary (2000) and drift (3000) streams, seeds 1–10. The LLM's own
+  decision time (median ~0.9 s) is reported separately and not added to execution latency.

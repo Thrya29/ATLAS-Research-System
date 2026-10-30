@@ -48,6 +48,43 @@ tools within 0.05. H7b predicted a planning p95 of at most 10 ms. H7c predicted 
 | H8 | Imputing superseded answers raises success under drift. | success | ATLAS vs A10 (E3) |
 | H9 | It also raises cost per success (the dev-seed trade-off reappears). | cost / success | ATLAS vs A10 (E3) |
 
+### Caching (registered 2026-10-30, before the cache was implemented)
+
+**Design.** A result cache stores fresh tool answers per (tool, normalised query). In planning, each cache hit is an
+extra candidate: a virtual tool `cache:<tool>` with the same capabilities, zero price and about 1 ms latency.
+* **Learned mode.** The virtual tool's answer quality is learned per task family like any other tool's, so stale
+  answers to volatile questions are learned to be untrustworthy.
+* **Fixed-TTL mode** (the usual cache). Any fresh hit is used.
+
+**Protocol (E7).** E2 drift stream, 3000 tasks, seeds 1–10, cache max age 500 tasks.
+* Volatile families: `kpi_today`, `stock_quote`, `breaking_news` and `market_compare`. A cached answer to one of
+  these becomes wrong 100 tasks after it was produced. All other answers stay valid.
+* Variants: no cache, fixed-TTL cache, learned cache.
+
+| ID | Hypothesis | Primary metric | Comparison |
+|---|---|---|---|
+| H10 | The learned cache lowers cost per success vs no cache, and success drops by at most 0.01. | cost / success, success | learned vs none (E7) |
+| H11 | The fixed-TTL cache has lower success than the learned cache, because it serves stale answers to volatile questions. | success | fixed vs learned (E7) |
+
+### LLM-as-router baseline (registered 2026-10-30, before B6 was run)
+
+**B6.** A local LLM (Qwen2.5-0.5B-Instruct, Q4_K_M, llama.cpp on CPU) picks the tools directly, as in the common
+"LLM-powered query router" design.
+* It sees every tool's name, description, outputs, required inputs and role restrictions.
+* It gets one worked example per task family: a *training* phrasing labelled with the oracle's tool set, the same
+  supervision B2 receives.
+* Grammar-constrained decoding guarantees it names only real tools. It does not learn online.
+
+**Protocol (E8).** Stationary (2000 tasks) and drift (3000 tasks) streams, seeds 1–10, against ATLAS, B2 and B5.
+
+| ID | Hypothesis | Primary metric | Comparison |
+|---|---|---|---|
+| H12 | ATLAS has higher success and lower cost per success than the LLM router, in both settings. | success, cost / success | ATLAS vs B6 (E8) |
+
+**Caveat stated in advance.** A 0.5B model is far weaker than the GPT-4-class models usually used as routers. A
+result in ATLAS's favour therefore shows that a *small local* LLM router is not competitive. It does not show that
+large LLM routers are not.
+
 **Expected trade-off (stated in advance).** The VoI rule spends extra calls to buy success, so ATLAS is expected to make
 *more* calls per task and *more* strict-unnecessary calls than routers that never verify. That is a deliberate,
 parameterised trade-off (value of success $V$, quality target $Q_{\min}$), and E5 maps it. If verification did not pay for

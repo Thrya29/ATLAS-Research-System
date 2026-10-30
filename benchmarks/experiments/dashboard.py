@@ -160,6 +160,16 @@ def understanding() -> dict:
     return out
 
 
+def bars_of(kind: str, labels: dict[str, str], keys=("success", "cost_per_success_musd", "calls_per_task")) -> dict:
+    path = REPORTS / f"{kind}.json"
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text())
+    return {
+        short: {k: _ci([s[k] for s in data[lab]["seeds"].values()]) for k in keys} for lab, short in labels.items() if lab in data
+    }
+
+
 def main() -> None:
     meta = json.loads((REPORTS / "run_meta.json").read_text())
     data = {
@@ -172,6 +182,16 @@ def main() -> None:
         "scaling": scaling(),
         "live": live(),
         "understanding": understanding(),
+        "cache": bars_of("E7", {"no cache": "No cache", "fixed-TTL cache": "Fixed-TTL cache", "learned cache": "Learned cache"}),
+        "llm_router": bars_of(
+            "E8",
+            {
+                "ATLAS|drift": "ATLAS",
+                "B2 Supervised model|drift": "B2 Supervised",
+                "B5 Contextual bandit|drift": "B5 Bandit",
+                "B6 LLM router (Qwen 0.5B)|drift": "B6 LLM router",
+            },
+        ),
         "metrics": {k: v[0] for k, v in METRICS.items()},
     }
     template = (Path(__file__).with_name("dashboard_template.html")).read_text(encoding="utf-8")

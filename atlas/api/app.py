@@ -33,6 +33,7 @@ from pydantic import BaseModel, Field
 
 from atlas.core.types import Decision, ExecutionReport, RequestContext
 from atlas.persistence import FileStore, RedisStore
+from atlas.router import ATLASConfig
 from atlas.service import AtlasService, build_tools
 from atlas.understanding.classifier import TaskUnderstanding
 
@@ -89,7 +90,8 @@ async def lifespan(app: FastAPI):
     redis_url = os.environ.get("ATLAS_REDIS_URL")
     store = RedisStore(redis_url) if redis_url else FileStore(os.environ.get("ATLAS_STATE_PATH", data / "state" / "router.json"))
     app.state.keys = _api_keys()
-    app.state.svc = AtlasService(build_tools(data), default_understanding(), store)
+    # Learned result caching (E7): repeated questions reuse fresh answers unless they are learned to go stale.
+    app.state.svc = AtlasService(build_tools(data), default_understanding(), store, config=ATLASConfig(cache="learned"))
     yield
     app.state.svc.snapshot()
 

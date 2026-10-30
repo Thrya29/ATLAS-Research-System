@@ -1,0 +1,3907 @@
+{
+"Am I allowed to do this under the data retention rules? I need the approval steps": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the data retention rules? I need the deadlines": [
+"search_a",
+"sql_primary"
+],
+"Am I allowed to do this under the data retention rules? I need the eligibility": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the data retention rules? I need the exceptions": [
+"search_c",
+"vector_docs"
+],
+"Am I allowed to do this under the data retention rules? I need the reimbursement limits": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the expense rules? I need the approval steps": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the expense rules? I need the deadlines": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the expense rules? I need the eligibility": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the expense rules? I need the exceptions": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the expense rules? I need the reimbursement limits": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the parental leave rules? I need the approval steps": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the parental leave rules? I need the deadlines": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the parental leave rules? I need the eligibility": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the parental leave rules? I need the exceptions": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the parental leave rules? I need the reimbursement limits": [
+"search_c",
+"vector_docs"
+],
+"Am I allowed to do this under the remote work rules? I need the approval steps": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the remote work rules? I need the deadlines": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the remote work rules? I need the eligibility": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the remote work rules? I need the exceptions": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the remote work rules? I need the reimbursement limits": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the security rules? I need the approval steps": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the security rules? I need the deadlines": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the security rules? I need the eligibility": [
+"search_a",
+"vector_legacy"
+],
+"Am I allowed to do this under the security rules? I need the exceptions": [
+"search_c",
+"vector_legacy"
+],
+"Am I allowed to do this under the security rules? I need the reimbursement limits": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the travel rules? I need the approval steps": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the travel rules? I need the deadlines": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the travel rules? I need the eligibility": [
+"search_a",
+"vector_docs"
+],
+"Am I allowed to do this under the travel rules? I need the exceptions": [
+"search_c",
+"vector_docs"
+],
+"Am I allowed to do this under the travel rules? I need the reimbursement limits": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our net bookings with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for H1": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for Q1": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for Q2": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for Q3": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for Q4": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for last month": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Acme Corp? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our net bookings with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Globex? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our net bookings with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for last month": [
+"search_a",
+"sql_primary"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Hooli? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for H1": [
+"search_a",
+"search_b"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"search_b"
+],
+"Are we outpacing Initech? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our net bookings with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Initech? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our net bookings with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Stark Industries? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our ARR with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for H1": [
+"search_a",
+"search_b"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our churn with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for last quarter": [
+"search_a",
+"search_b"
+],
+"Are we outpacing Vandelay? Contrast our gross margin with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our net bookings with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our order volume with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our revenue with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our sales with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for H1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for Q1": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for Q2": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for Q3": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for Q4": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for last month": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for last quarter": [
+"search_a",
+"vector_docs"
+],
+"Are we outpacing Vandelay? Contrast our signups with their market data for the previous quarter": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our ARR increase versus H1?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus Q1?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus Q2?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus Q3?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus Q4?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus last month?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus last quarter?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our ARR increase versus the previous quarter?": [
+"calculator",
+"vector_docs"
+],
+"By what percent did our churn increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our churn increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our gross margin increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our net bookings increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus Q3?": [
+"search_a",
+"sql_primary"
+],
+"By what percent did our order volume increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our order volume increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our revenue increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our sales increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus H1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus Q1?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus Q2?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus Q3?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus Q4?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus last month?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus last quarter?": [
+"search_a",
+"vector_docs"
+],
+"By what percent did our signups increase versus the previous quarter?": [
+"search_a",
+"vector_docs"
+],
+"Catch me up on what happened this week with the EU AI Act": [
+"search_a",
+"search_b"
+],
+"Catch me up on what happened this week with the central bank": [
+"search_a",
+"search_b"
+],
+"Catch me up on what happened this week with the chip export rules": [
+"search_a",
+"search_b"
+],
+"Catch me up on what happened this week with the merger talks": [
+"search_a",
+"search_c"
+],
+"Catch me up on what happened this week with the port strike": [
+"search_a",
+"search_b"
+],
+"Describe TCP with an example": [
+"sql_primary",
+"vector_docs"
+],
+"Describe a hash table with an example": [
+"sql_replica",
+"vector_docs"
+],
+"Describe a p95 latency with an example": [
+"search_a",
+"vector_docs"
+],
+"Describe inflation with an example": [
+"search_a",
+"vector_docs"
+],
+"Describe photosynthesis with an example": [
+"vector_docs",
+"vector_legacy"
+],
+"Describe the Pythagorean theorem with an example": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Diagnose the auth 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Diagnose the billing 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Diagnose the checkout 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Diagnose the notifications 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Diagnose the payments 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Diagnose the search 500s with log evidence and the documented remediation": [
+"log_search",
+"vector_docs"
+],
+"Do a regression of ARR against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of ARR against account age for EMEA": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of ARR against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of ARR against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of ARR against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of ARR against account age for self-serve": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of churn against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of churn against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of churn against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of churn against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of churn against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of churn against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of gross margin against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for APAC": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of net bookings against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of order volume against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of revenue against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of sales against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of sales against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of sales against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of sales against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of sales against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of sales against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of signups against account age for APAC": [
+"search_a",
+"vector_legacy"
+],
+"Do a regression of signups against account age for EMEA": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of signups against account age for SMB": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of signups against account age for enterprise": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of signups against account age for partner-led": [
+"search_b",
+"vector_legacy"
+],
+"Do a regression of signups against account age for self-serve": [
+"search_b",
+"vector_legacy"
+],
+"Give me the QoQ delta of ARR relative to H1, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to Q1, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to Q2, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to Q3, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to Q4, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to last month, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to last quarter, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of ARR relative to the previous quarter, as a percentage": [
+"calculator",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to Q1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to Q3, as a percentage": [
+"search_b",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to last month, as a percentage": [
+"search_a",
+"vector_legacy"
+],
+"Give me the QoQ delta of churn relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of churn relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to Q1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to Q3, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to last month, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of gross margin relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to Q1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to Q3, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to last month, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of net bookings relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to H1, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to Q1, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to Q2, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to Q3, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to Q4, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to last month, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to last quarter, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of order volume relative to the previous quarter, as a percentage": [
+"sql_primary",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to Q1, as a percentage": [
+"search_a",
+"vector_legacy"
+],
+"Give me the QoQ delta of revenue relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to Q3, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to last month, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of revenue relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to Q1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to Q3, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to last month, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of sales relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to H1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to Q1, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to Q2, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to Q3, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to Q4, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to last month, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to last quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the QoQ delta of signups relative to the previous quarter, as a percentage": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute ARR figure for APAC": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute ARR figure for EMEA": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute ARR figure for SMB": [],
+"Give me the up-to-the-minute ARR figure for enterprise": [],
+"Give me the up-to-the-minute ARR figure for partner-led": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute ARR figure for self-serve": [],
+"Give me the up-to-the-minute churn figure for APAC": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute churn figure for EMEA": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute churn figure for SMB": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute churn figure for enterprise": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute churn figure for partner-led": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute churn figure for self-serve": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for APAC": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for EMEA": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for SMB": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for enterprise": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for partner-led": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute gross margin figure for self-serve": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute net bookings figure for APAC": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute net bookings figure for EMEA": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute net bookings figure for SMB": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute net bookings figure for enterprise": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute net bookings figure for partner-led": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute net bookings figure for self-serve": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute order volume figure for APAC": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute order volume figure for EMEA": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute order volume figure for SMB": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute order volume figure for enterprise": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute order volume figure for partner-led": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute order volume figure for self-serve": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for APAC": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for EMEA": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for SMB": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for enterprise": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for partner-led": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute revenue figure for self-serve": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for APAC": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for EMEA": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for SMB": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for enterprise": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for partner-led": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute sales figure for self-serve": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute signups figure for APAC": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute signups figure for EMEA": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute signups figure for SMB": [
+"search_a",
+"sql_primary"
+],
+"Give me the up-to-the-minute signups figure for enterprise": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute signups figure for partner-led": [
+"search_a",
+"vector_docs"
+],
+"Give me the up-to-the-minute signups figure for self-serve": [
+"search_a",
+"sql_primary"
+],
+"Give the H1 ARR figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 churn figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 net bookings figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the H1 revenue figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 sales figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the H1 signups figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q1 ARR figure along with the narrative from the internal review": [
+"calculator",
+"sql_primary"
+],
+"Give the Q1 churn figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q1 gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q1 net bookings figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q1 order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q1 revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q1 sales figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q1 signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q2 ARR figure along with the narrative from the internal review": [
+"calculator",
+"sql_primary"
+],
+"Give the Q2 churn figure along with the narrative from the internal review": [
+"search_c",
+"vector_docs"
+],
+"Give the Q2 gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q2 net bookings figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q2 order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q2 revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q2 sales figure along with the narrative from the internal review": [
+"sql_primary",
+"vector_docs"
+],
+"Give the Q2 signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q3 ARR figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q3 churn figure along with the narrative from the internal review": [
+"search_c",
+"vector_docs"
+],
+"Give the Q3 gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q3 net bookings figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q3 order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q3 revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q3 sales figure along with the narrative from the internal review": [
+"search_a",
+"sql_replica"
+],
+"Give the Q3 signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q4 ARR figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q4 churn figure along with the narrative from the internal review": [
+"search_c",
+"vector_docs"
+],
+"Give the Q4 gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q4 net bookings figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q4 order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the Q4 revenue figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the Q4 sales figure along with the narrative from the internal review": [
+"sql_replica",
+"vector_docs"
+],
+"Give the Q4 signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last month ARR figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last month churn figure along with the narrative from the internal review": [
+"search_c",
+"vector_docs"
+],
+"Give the last month gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the last month net bookings figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last month order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last month revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last month sales figure along with the narrative from the internal review": [
+"sql_replica",
+"vector_docs"
+],
+"Give the last month signups figure along with the narrative from the internal review": [
+"sql_primary",
+"vector_docs"
+],
+"Give the last quarter ARR figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the last quarter churn figure along with the narrative from the internal review": [
+"search_c",
+"vector_docs"
+],
+"Give the last quarter gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the last quarter net bookings figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the last quarter order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last quarter revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the last quarter sales figure along with the narrative from the internal review": [
+"sql_primary",
+"vector_docs"
+],
+"Give the last quarter signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the the previous quarter ARR figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the the previous quarter churn figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the the previous quarter gross margin figure along with the narrative from the internal review": [
+"search_a",
+"vector_docs"
+],
+"Give the the previous quarter net bookings figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the the previous quarter order volume figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the the previous quarter revenue figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the the previous quarter sales figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"Give the the previous quarter signups figure along with the narrative from the internal review": [
+"search_a",
+"sql_primary"
+],
+"How much is one share of ACME worth at the moment?": [
+"search_a",
+"vector_docs"
+],
+"How much is one share of GLBX worth at the moment?": [
+"search_a",
+"vector_docs"
+],
+"How much is one share of HOOL worth at the moment?": [
+"search_a",
+"vector_legacy"
+],
+"How much is one share of INIT worth at the moment?": [
+"search_a",
+"vector_legacy"
+],
+"How much is one share of STRK worth at the moment?": [
+"search_a",
+"vector_legacy"
+],
+"How much is one share of VNDL worth at the moment?": [
+"search_a",
+"vector_docs"
+],
+"I keep hearing about TCP, what does it mean?": [
+"search_c",
+"vector_legacy"
+],
+"I keep hearing about a hash table, what does it mean?": [
+"search_a",
+"vector_docs"
+],
+"I keep hearing about a p95 latency, what does it mean?": [
+"search_a",
+"vector_docs"
+],
+"I keep hearing about inflation, what does it mean?": [
+"search_c",
+"vector_docs"
+],
+"I keep hearing about photosynthesis, what does it mean?": [
+"search_a",
+"vector_docs"
+],
+"I keep hearing about the Pythagorean theorem, what does it mean?": [
+"search_c",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from H1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from Q3 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from last month and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from last quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of APAC cohorts from the previous quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from H1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from Q3 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from last month and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from last quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of EMEA cohorts from the previous quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from H1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from Q3 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from last month and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from last quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of SMB cohorts from the previous quarter and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from H1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from Q3 and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from last month and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from last quarter and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of enterprise cohorts from the previous quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from H1 and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from Q3 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from last month and estimate 12-week retention": [
+"search_b",
+"search_c",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from last quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of partner-led cohorts from the previous quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from H1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from Q1 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from Q2 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from Q3 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from Q4 and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from last month and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from last quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Model the decay of self-serve cohorts from the previous quarter and estimate 12-week retention": [
+"search_a",
+"search_b",
+"vector_docs"
+],
+"Quantify the gap between our ARR and Acme Corp's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our ARR and Globex's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our ARR and Hooli's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our ARR and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our ARR and Stark Industries's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our ARR and Vandelay's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our churn and Acme Corp's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our churn and Globex's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our churn and Hooli's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our churn and Initech's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our churn and Stark Industries's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our churn and Vandelay's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our gross margin and Acme Corp's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our gross margin and Globex's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our gross margin and Hooli's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our gross margin and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our gross margin and Stark Industries's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our gross margin and Vandelay's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our net bookings and Acme Corp's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our net bookings and Globex's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our net bookings and Hooli's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our net bookings and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our net bookings and Stark Industries's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our net bookings and Vandelay's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our order volume and Acme Corp's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our order volume and Globex's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our order volume and Hooli's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our order volume and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our order volume and Stark Industries's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our order volume and Vandelay's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our revenue and Acme Corp's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our revenue and Globex's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our revenue and Hooli's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our revenue and Initech's valuation": [
+"search_c",
+"vector_docs"
+],
+"Quantify the gap between our revenue and Stark Industries's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our revenue and Vandelay's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our sales and Acme Corp's valuation": [
+"search_c",
+"vector_docs"
+],
+"Quantify the gap between our sales and Globex's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our sales and Hooli's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our sales and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our sales and Stark Industries's valuation": [
+"search_a",
+"vector_legacy"
+],
+"Quantify the gap between our sales and Vandelay's valuation": [
+"vector_docs",
+"vector_legacy"
+],
+"Quantify the gap between our signups and Acme Corp's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our signups and Globex's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our signups and Hooli's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our signups and Initech's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our signups and Stark Industries's valuation": [
+"search_a",
+"vector_docs"
+],
+"Quantify the gap between our signups and Vandelay's valuation": [
+"search_c",
+"vector_docs"
+],
+"Quote me Acme Corp (ACME) on the exchange": [],
+"Quote me Acme Corp (GLBX) on the exchange": [
+"fin_api",
+"sql_primary"
+],
+"Quote me Acme Corp (HOOL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Acme Corp (INIT) on the exchange": [
+"fin_api",
+"sql_primary"
+],
+"Quote me Acme Corp (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Acme Corp (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (ACME) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (GLBX) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (HOOL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (INIT) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Globex (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Hooli (ACME) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Hooli (GLBX) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Hooli (HOOL) on the exchange": [],
+"Quote me Hooli (INIT) on the exchange": [
+"fin_api",
+"sql_primary"
+],
+"Quote me Hooli (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Hooli (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (ACME) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (GLBX) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (HOOL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (INIT) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Initech (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (ACME) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (GLBX) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (HOOL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (INIT) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Stark Industries (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (ACME) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (GLBX) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (HOOL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (INIT) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (STRK) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote me Vandelay (VNDL) on the exchange": [
+"search_a",
+"sql_primary"
+],
+"Quote the approval steps clause from our data retention policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the approval steps clause from our expense policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the approval steps clause from our parental leave policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the approval steps clause from our remote work policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the approval steps clause from our security policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the approval steps clause from our travel policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our data retention policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our expense policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our parental leave policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our remote work policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our security policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the deadlines clause from our travel policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our data retention policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our expense policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our parental leave policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our remote work policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our security policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the eligibility clause from our travel policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the exceptions clause from our data retention policy": [
+"search_c",
+"vector_docs"
+],
+"Quote the exceptions clause from our expense policy": [
+"search_c",
+"vector_legacy"
+],
+"Quote the exceptions clause from our parental leave policy": [
+"search_c",
+"vector_legacy"
+],
+"Quote the exceptions clause from our remote work policy": [
+"search_c",
+"vector_legacy"
+],
+"Quote the exceptions clause from our security policy": [
+"search_c",
+"vector_legacy"
+],
+"Quote the exceptions clause from our travel policy": [
+"search_c",
+"vector_legacy"
+],
+"Quote the reimbursement limits clause from our data retention policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the reimbursement limits clause from our expense policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the reimbursement limits clause from our parental leave policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the reimbursement limits clause from our remote work policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the reimbursement limits clause from our security policy": [
+"search_a",
+"vector_docs"
+],
+"Quote the reimbursement limits clause from our travel policy": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our ARR numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our churn numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our churn numbers for Q1 with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for Q2 with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for Q3 with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for Q4 with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for last month with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for last quarter with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our churn numbers for the previous quarter with what the strategy memo claims": [
+"search_c",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our gross margin numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our net bookings numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our order volume numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our revenue numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our sales numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for H1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for Q1 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for Q2 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for Q3 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for Q4 with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for last month with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for last quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Reconcile our signups numbers for the previous quarter with what the strategy memo claims": [
+"search_a",
+"vector_docs"
+],
+"Someone told me EV sales doubled in two years - does the arithmetic hold up against published data?": [
+"search_a",
+"vector_docs"
+],
+"Someone told me air travel recovered to 95% of 2019 levels - does the arithmetic hold up against published data?": [
+"search_a",
+"vector_docs"
+],
+"Someone told me average US rent rose by a third since 2020 - does the arithmetic hold up against published data?": [
+"search_a",
+"vector_docs"
+],
+"Someone told me global smartphone shipments fell 12% last year - does the arithmetic hold up against published data?": [
+"search_a",
+"vector_docs"
+],
+"Verify with public figures: EV sales doubled in two years": [
+"search_a",
+"vector_docs"
+],
+"Verify with public figures: air travel recovered to 95% of 2019 levels": [
+"search_a",
+"vector_docs"
+],
+"Verify with public figures: average US rent rose by a third since 2020": [
+"search_a",
+"vector_docs"
+],
+"Verify with public figures: global smartphone shipments fell 12% last year": [
+"search_a",
+"vector_docs"
+],
+"What are journalists saying about the EU AI Act right now?": [
+"search_a",
+"vector_docs"
+],
+"What are journalists saying about the central bank right now?": [
+"search_a",
+"vector_docs"
+],
+"What are journalists saying about the chip export rules right now?": [
+"search_a",
+"vector_docs"
+],
+"What are journalists saying about the merger talks right now?": [
+"search_a",
+"vector_docs"
+],
+"What are journalists saying about the port strike right now?": [
+"search_a",
+"vector_docs"
+],
+"Where does ARR stand as of this morning?": [],
+"Where does churn stand as of this morning?": [
+"search_a",
+"vector_docs"
+],
+"Where does gross margin stand as of this morning?": [
+"search_a",
+"vector_docs"
+],
+"Where does net bookings stand as of this morning?": [
+"search_a",
+"vector_docs"
+],
+"Where does order volume stand as of this morning?": [
+"search_a",
+"sql_primary"
+],
+"Where does revenue stand as of this morning?": [
+"sql_primary"
+],
+"Where does sales stand as of this morning?": [
+"sql_primary"
+],
+"Where does signups stand as of this morning?": [
+"search_a",
+"sql_primary"
+],
+"auth is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+],
+"billing is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+],
+"checkout is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+],
+"notifications is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+],
+"payments is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+],
+"search is failing for users, what do the stack traces and our runbooks say?": [
+"search_b",
+"vector_docs"
+]
+}

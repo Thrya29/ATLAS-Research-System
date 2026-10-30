@@ -92,10 +92,45 @@ seeds, and 0.02 is the smallest p a 10-seed Wilcoxon test can reach after correc
 ATLAS leads at every understanding quality. A 0.5B local LLM is a much *worse* understanding stage than a small trained
 classifier: lower accuracy, and about 200× slower. Understanding errors cap every router.
 
-## 4. Hypotheses (see [research/hypotheses.md](research/hypotheses.md))
+## 4. Caching (E7) and an LLM-as-router baseline (E8)
 
-H1–H6 were fixed before the first reported run. H7b, H8 and H9 were registered after development on separate dev
-seeds, before the 20-seed rerun.
+**Learned result caching (E7, drift, 10 seeds).** Repeated questions can reuse fresh tool answers. Answers to volatile
+questions (live KPIs, stock quotes, news, market comparisons) go stale after 100 tasks.
+* In ATLAS a cache hit is planned like a cheap, instant tool.
+* P(cached answer still valid | question type, answer age) is learned, and shared across tools.
+
+| Variant | Success | Cost / success (m$) | Tool calls / task |
+|---|---|---|---|
+| ATLAS, no cache | 0.890 [0.888, 0.892] | 4.64 | 1.88 |
+| ATLAS + fixed-TTL cache (serve any fresh hit) | 0.816 [0.813, 0.820] | 3.45 | 1.30 |
+| **ATLAS + learned cache** | **0.881 [0.879, 0.884]** | **3.63** | **1.46** |
+
+The learned cache cuts cost per success by 22% and tool calls by 22%, for −0.008 success. An ordinary TTL cache saves
+slightly more but loses 6.5 points of success to stale answers. Note that the baselines in sections 1–2 have no cache.
+With the learned cache, ATLAS (0.881, 3.63 m$) beats uncached B2 (0.725, 4.55) and B5 (0.805, 4.53) on both axes, but
+this is not a like-for-like comparison.
+
+**An LLM picks the tools (E8, 10 seeds).** This is the common "LLM-powered query router" design.
+* B6 gives a local Qwen2.5-0.5B the tool catalogue (descriptions, inputs, outputs, role limits).
+* It also gets one oracle-labelled example per task family.
+* Grammar-constrained decoding means it can only answer with real tool names.
+
+| Router | Stationary success | Stationary cost / success | Drift success | Drift cost / success |
+|---|---|---|---|---|
+| **ATLAS** | **0.908** | 4.27 | **0.890** | 4.64 |
+| B2 Supervised | 0.833 | **4.01** | 0.725 | 4.55 |
+| B5 Bandit | 0.838 | 4.26 | 0.805 | **4.53** |
+| B6 LLM router (Qwen 0.5B) | 0.426 | 11.97 | 0.419 | 12.00 |
+
+The small LLM almost always picks two tools (912 of 969 questions), often the wrong ones. It also needs ~0.9 s per
+query on CPU just to decide. **Caveat:** GPT-4-class routers are far stronger than a 0.5B model. This result shows that
+a *small local* LLM router is not competitive. It says nothing about large ones, which this project could not evaluate
+without paid APIs.
+
+## 5. Hypotheses (see [research/hypotheses.md](research/hypotheses.md))
+
+H1–H6 were fixed before the first reported run. H7b–H12 were registered after development on separate dev seeds
+(0, 101, 102), before their reported runs.
 
 | | Hypothesis | Outcome |
 |---|---|---|
@@ -108,6 +143,9 @@ seeds, before the 20-seed rerun.
 | H7b | Planning p95 ≤ 10 ms at 512 tools | **Not supported** (15.5 ms) |
 | H8 | Imputing answers superseded by verification raises success | **Supported.** +0.015 vs A10 |
 | H9 | …and raises cost per success | **Supported.** +0.38 m$ vs A10 (ATLAS stops relying on cheap tools plus verification) |
+| H10 | The learned cache lowers cost per success with ≤ 0.01 success loss | **Supported.** −1.01 m$ (−22%); success −0.008 [−0.010, −0.007] |
+| H11 | A fixed-TTL cache loses success to stale answers vs the learned cache | **Supported.** −0.065 success |
+| H12 | ATLAS beats an LLM router on success and cost per success | **Supported** for a local 0.5B model: +0.47–0.48 success, −7.4 to −7.7 m$ (see caveat above) |
 
 ### What the results do *not* show (read before quoting numbers)
 
@@ -161,7 +199,8 @@ docker compose up --build                              # API + Redis + Prometheu
 ## Reproducing every number
 
 ```bash
-python -m benchmarks.experiments.run_all --workers 5   # E1–E5, seeds 1–20 (~31 min on 6 cores); resumable
+python -m benchmarks.experiments.run_all --workers 5   # E1–E5, E7, E8 (~40 min on 6 cores); resumable
+python -m benchmarks.experiments.llm_router            # only to regenerate B6's cached LLM choices (needs the model)
 python -m benchmarks.experiments.report                # benchmarks/reports/RESULTS.md + figures
 python -m benchmarks.live.run --seeds 1-10 --tasks 400 # live evaluation (~15 min per seed, seeds run in parallel)
 python -m benchmarks.experiments.understanding         # E6 (uses the committed LLM output cache)

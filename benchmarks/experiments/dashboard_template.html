@@ -417,6 +417,26 @@ const DATA = /*__DATA__*/null;
       c.append(table(["Router", ...D.live.families], names.map((n) => [n, ...D.live.routers[n].family.map(f3)])));
     }
 
+    // ---- two-metric comparisons drawn as side-by-side charts (one axis each, never dual-axis)
+    function pair(title, sub, data, highlight, note) {
+      if (!data || !Object.keys(data).length) return;
+      const c = card(title, sub);
+      const names = Object.keys(data);
+      const wrap = h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px" });
+      const a = h("div", { class: "chart" }), b = h("div", { class: "chart" });
+      wrap.append(h("div", {}, h("div", { class: "sub" }, "Task success (higher is better)"), a), h("div", {}, h("div", { class: "sub" }, "Cost per success, m$ (lower is better)"), b));
+      c.append(wrap);
+      const rows = (k, fmt) => names.map((n) => ({ label: n, value: data[n][k].mean, lo: data[n][k].lo, hi: data[n][k].hi, color: n === highlight ? ATL : NEU }));
+      barsH(a, rows("success"), { fmt: f3, label: "success", domain: [0, 1] });
+      barsH(b, rows("cost_per_success_musd"), { fmt: f2, label: "cost / success (m$)" });
+      if (note) c.append(h("div", { class: "note" }, note));
+      c.append(table(["Variant", "Success", "Cost / success (m$)", "Tool calls / task"], names.map((n) => [n, f3(data[n].success.mean), f2(data[n].cost_per_success_musd.mean), f2(data[n].calls_per_task.mean)])));
+    }
+    pair("Learned caching: 22% cheaper, almost no success lost", "E7, drift, 10 seeds. Repeated questions; answers to volatile questions go stale after 100 tasks.",
+      D.cache, "Learned cache", "A fixed-TTL cache serves stale answers; the learned cache learns per question type and answer age when cached answers stop being valid.");
+    pair("Against an LLM picking the tools", "E8, drift, 10 seeds. B6: local Qwen2.5-0.5B with the tool catalogue and worked examples.",
+      D.llm_router, "ATLAS", "A 0.5B local model is far weaker than GPT-4-class routers; this shows a small local LLM router is not competitive, not that large ones are not.");
+
     // ---- understanding
     {
       const c = card("The lead holds at every level of query understanding", "E6: same simulator and routers, understanding stage swapped (5 seeds × 400 tasks). A small local LLM is the weakest option.", true);
