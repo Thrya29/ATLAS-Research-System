@@ -25,6 +25,9 @@ from benchmarks.simulator.tasks import Task, generate
 
 BASE_CTX = RequestContext()
 WARMUP_TASKS = 300
+# The logging policy is pinned (not derived from ATLASConfig defaults) so the shared
+# offline log does not change when the router under test changes.
+LOGGER_CONFIG = ATLASConfig(uniform_policy=True, stopping=False, impute_superseded=False)
 TRAIN_TASKS = 2000
 
 
@@ -94,9 +97,15 @@ def train_understanding(seed: int = 0) -> TaskUnderstanding:
 
 
 def make_router(
-    name: str, registry: ToolRegistry, env: SimEnvironment, seed: int, breakers: CircuitBreakers, cfg: ATLASConfig | None = None
+    name: str,
+    registry: ToolRegistry,
+    env: SimEnvironment,
+    seed: int,
+    breakers: CircuitBreakers,
+    cfg: ATLASConfig | None = None,
+    understanding=None,
 ):
-    u = train_understanding()
+    u = understanding or train_understanding()
     if name == "B0":
         return SingleToolRouter(registry, u)
     if name == "B1":
@@ -184,9 +193,7 @@ def warmup_logs(registry: ToolRegistry, profiles: list[Profile], seed: int, n: i
     env = SimEnvironment(profiles, [], seed=10_000 + seed)
     clock = {"t": 0}
     breakers = CircuitBreakers(clock=lambda: clock["t"], cooldown=30)
-    logger = ATLASRouter(
-        registry, train_understanding(), ATLASConfig(uniform_policy=True, stopping=False), breakers, seed, name="logger"
-    )
+    logger = ATLASRouter(registry, train_understanding(), LOGGER_CONFIG, breakers, seed, name="logger")
     tasks = [replace(t, id=t.id + 1_000_000) for t in generate(n, seed, "train")]
     log: list = []
     asyncio.run(_run(logger, env, tasks, registry, breakers, seed, BASE_CTX, clock, log=log))
@@ -203,13 +210,14 @@ def run(
     ctx: RequestContext = BASE_CTX,
     warm: bool = True,
     label: str | None = None,
+    understanding=None,
 ) -> list[Record]:
     profiles = profiles or default_profiles()
     registry = ToolRegistry(p.spec for p in profiles)
     env = SimEnvironment(profiles, list(drifts), seed=seed)
     clock = {"t": 0}
     breakers = CircuitBreakers(clock=lambda: clock["t"], cooldown=30)
-    router = make_router(router_name, registry, env, seed, breakers, cfg)
+    router = make_router(router_name, registry, env, seed, breakers, cfg, understanding)
     if label:
         router.name = label
     if warm and hasattr(router, "warm_start"):

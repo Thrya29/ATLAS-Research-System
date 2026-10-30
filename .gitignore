@@ -12,3 +12,5 @@ benchmarks/reports/shards*/
 .coverage
 htmlcov/
 benchmarks/reports/*.log
+data/live/
+data/models/

@@ -9,8 +9,8 @@ jobs:
     strategy:
       matrix: { python: ["3.11", "3.12"] }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with: { python-version: "${{ matrix.python }}", cache: pip }
       - run: pip install -e ".[dev,langchain]"
       - run: ruff check .
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: docker build -f deployment/docker/Dockerfile -t atlas:ci .
       - name: Container smoke test
         run: |

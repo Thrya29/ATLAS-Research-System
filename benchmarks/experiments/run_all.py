@@ -49,6 +49,7 @@ ABLATIONS = {
     "A7 -feasibility": replace(BASE, feasibility_filter=False),
     "A8 -fallback": replace(BASE, fallback=False),
     "A9 -exploration": replace(BASE, explore=False),
+    "A10 -imputation": replace(BASE, impute_superseded=False),
 }
 
 

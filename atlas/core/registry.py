@@ -44,6 +44,9 @@ class ToolRegistry:
     def providers(self, type_: str) -> list[ToolSpec]:
         return [self._tools[n] for n in sorted(self._by_type.get(type_, ()))]
 
+    def has_providers(self, type_: str) -> bool:
+        return bool(self._by_type.get(type_))
+
     @property
     def types(self) -> set[str]:
         return {t for t, names in self._by_type.items() if names}

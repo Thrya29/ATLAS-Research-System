@@ -64,3 +64,57 @@ python -m benchmarks.experiments.run_all --workers 5     # all experiments, seed
 python -m benchmarks.experiments.report                  # RESULTS.md + figures
 python -m benchmarks.experiments.run_all --quick         # 3 seeds, ~13 min
 ```
+
+## Live evaluation (real tool execution)
+
+`benchmarks/live` routes the same kinds of decisions over **tools that really execute**, on a generated company
+world (`benchmarks/live/world.py`).
+
+**The tools:**
+
+| Capability | Tools |
+|---|---|
+| `scalars` / `table` | `sql_primary` (SQLite primary) and `sql_replica`, a stale copy whose latest-quarter figures are preliminary |
+| `internal_docs` | `docs_hybrid` (BM25 + character n-gram fusion over current policies) and `docs_archive` (cheaper BM25 over an archive that also holds superseded versions with identical wording) |
+| `logs` | `log_recent` (BM25 over the last two days) and `log_scan` (exact scan of the 30-day archive) |
+| `numeric_result` | `calculator` (computes percentage changes only) and `python_sandbox` (isolated subprocess) |
+
+**What is real:** the tools' outputs, errors and execution time. Answers are graded against the generator's ground
+truth, which no tool computes.
+
+**What is injected:** network latency in front of remote tools, transient failures, and a drift schedule. The schedule
+has three events: a primary-database incident (30–65% of the stream, 60% failures), a noisy neighbour on the sandbox
+(+900 ms from 50%), and a degraded search cluster (×12 latency from 65%). Injection is seeded per (task, tool,
+attempt), so every router faces identical faults.
+
+**The routers:**
+
+* ATLAS, and ATLAS v1 (without A10).
+* B4 and B5.
+* Two keyword-rule routers: one always uses the best-quality tools, one always uses the cheapest.
+* Every router is warm-started from the same 150-task uniform-policy log.
+
+**Protocol:** 10 seeds × 400 held-out-phrasing tasks. The understanding model is trained on separate training
+phrasings.
+
+```bash
+python -m benchmarks.live.run --seeds 1-10 --tasks 400      # ATLAS_LIVE_DIR sets where the world is written
+```
+
+## E6 — Sensitivity to the understanding stage
+
+The same simulator and routers (stationary, seeds 1–5, 400 tasks), with the understanding stage replaced by one of:
+
+* the TF-IDF classifier;
+* a local LLM: Qwen2.5-0.5B-Instruct Q4_K_M via llama.cpp on CPU. It uses grammar-constrained decoding over family
+  names, with the training phrasings as examples;
+* the true family (oracle);
+* the true family corrupted with probability 0.2 or 0.4.
+
+The LLM's answers are cached in `reports/llm_understanding_cache.json`, so the routing runs reproduce without the model.
+
+```bash
+pip install -e ".[llm]"
+ATLAS_LLM_MODEL=/path/to/qwen2.5-0.5b-instruct-q4_k_m.gguf python -m benchmarks.experiments.understanding --prepare
+python -m benchmarks.experiments.understanding
+```

@@ -67,6 +67,7 @@ class ATLASConfig:
     fallback: bool = True  # A8: replan failed steps
     explore: bool = True  # Thompson sampling (else posterior means)
     online: bool = True  # update statistics after deployment
+    impute_superseded: bool = True  # A10: learn from answers superseded by verification
     uniform_policy: bool = False  # pick uniformly among candidate plans (offline logging policy)
     candidates_per_type: int = 4
     k_plans: int = 32
@@ -160,25 +161,41 @@ class ATLASRouter:
         return d.rel * d.q * value - d.cost
 
     # -------------------------------------------------------------- candidates
-    def _candidates(self, ctx: RequestContext, family: str | None) -> tuple[dict[str, list[ToolSpec]], dict[str, str]]:
+    def _relevant(self, needed: frozenset[str]) -> list[str]:
+        """Needed types plus every type their providers (transitively) require."""
+        seen, frontier = set(needed), list(needed)
+        while frontier:
+            for spec in self.registry.providers(frontier.pop()):
+                for r in spec.requires - seen:
+                    seen.add(r)
+                    frontier.append(r)
+        return sorted(seen)
+
+    def _rejection(self, spec: ToolSpec, ctx: RequestContext) -> str | None:
+        if not self.cfg.feasibility_filter:
+            return None
+        if not spec.allowed_for(ctx.role):
+            return "unauthorized"
+        if self.breakers is not None and not self.breakers.allow(spec.name):
+            return "circuit_open"
+        if any(not self.registry.has_providers(r) for r in spec.requires):
+            return "unsatisfiable_input"
+        return None
+
+    def _candidates(
+        self, ctx: RequestContext, family: str | None, needed: frozenset[str]
+    ) -> tuple[dict[str, list[ToolSpec]], dict[str, str]]:
         rejected: dict[str, str] = {}
-        ok: list[ToolSpec] = []
-        for spec in self.registry:
-            if self.cfg.feasibility_filter:
-                if not spec.allowed_for(ctx.role):
-                    rejected[spec.name] = "unauthorized"
-                    continue
-                if self.breakers is not None and not self.breakers.allow(spec.name):
-                    rejected[spec.name] = "circuit_open"
-                    continue
-                if any(not self.registry.providers(r) for r in spec.requires):
-                    rejected[spec.name] = "unsatisfiable_input"
-                    continue
-            ok.append(spec)
         by_type: dict[str, list[ToolSpec]] = {}
-        for spec in ok:
-            for t in spec.provides:
-                by_type.setdefault(t, []).append(spec)
+        verdict: dict[str, str | None] = {}
+        for t in self._relevant(needed):
+            for spec in self.registry.providers(t):
+                if spec.name not in verdict:
+                    verdict[spec.name] = self._rejection(spec, ctx)
+                    if verdict[spec.name]:
+                        rejected[spec.name] = verdict[spec.name]
+                if verdict[spec.name] is None:
+                    by_type.setdefault(t, []).append(spec)
         m = self.cfg.candidates_per_type
         for t, specs in by_type.items():
             specs.sort(key=lambda s: -self.expected_utility(s, family, ctx.value_of_success))
@@ -202,7 +219,7 @@ class ATLASRouter:
             decision.planning_ms = (time.perf_counter() - t0) * 1000
             return decision
 
-        cands, rejected = self._candidates(ctx, family)
+        cands, rejected = self._candidates(ctx, family, needed)
         decision.rejected = rejected
         decision.candidates = {t: [s.name for s in v] for t, v in cands.items()}
         draws = {s.name: self._draw(s, family, explore=True) for v in cands.values() for s in v}
@@ -312,6 +329,17 @@ class ATLASRouter:
                 q.update(ctx, 1.0, now)
             elif w > 0:
                 q.update(ctx, 0.0, now, w)
+        if self.cfg.impute_superseded:
+            # An answer superseded by a more confident one never reaches the
+            # grader, so its correctness is censored. Ignoring it hides exactly
+            # the mistakes verification caught and inflates the tool's quality;
+            # impute the calibrated probability of being correct instead.
+            for res in report.results:
+                if not res.ok or res.confidence is None or res.tool in blame or res.tool not in self.registry:
+                    continue
+                if self.registry.get(res.tool).provides & needed:
+                    p = self.calibration[_bin(res.confidence)].mean(now)
+                    self._stats(self.registry.get(res.tool)).quality.update(ctx, p, now)
         for t in needed:
             res = report.supplied[t]
             if res.confidence is None:
@@ -365,15 +393,17 @@ class _Hooks:
 
     def _alternatives(self, types: frozenset[str], exclude: set[str]) -> list[ToolSpec]:
         r, ctx = self.router, self.decision.context
-        alts = []
-        for spec in r.registry:
-            if spec.name in exclude or not (spec.provides & types):
-                continue
-            if r.cfg.feasibility_filter and (
-                not spec.allowed_for(ctx.role) or (r.breakers is not None and not r.breakers.allow(spec.name))
-            ):
-                continue
-            alts.append(spec)
+        alts, seen = [], set(exclude)
+        for t in sorted(types):
+            for spec in r.registry.providers(t):
+                if spec.name in seen:
+                    continue
+                seen.add(spec.name)
+                if r.cfg.feasibility_filter and (
+                    not spec.allowed_for(ctx.role) or (r.breakers is not None and not r.breakers.allow(spec.name))
+                ):
+                    continue
+                alts.append(spec)
         return alts
 
     def fallback(self, failed: PlanStep, results: list[ToolResult], exclude: set[str]) -> PlanStep | None:

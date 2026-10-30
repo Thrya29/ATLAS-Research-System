@@ -22,8 +22,8 @@
   20
  ],
  "quick": false,
- "jobs": 715,
- "wall_s": 1567.9,
+ "jobs": 735,
+ "wall_s": 1880.5,
  "numpy": "2.5.4",
  "python": "3.12.10"
 }

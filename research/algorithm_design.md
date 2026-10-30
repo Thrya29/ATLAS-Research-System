@@ -33,6 +33,8 @@ LEARN(decision, report, success):
   if all Ŷ supplied and success observed:
       w ← responsibilities ∝ (1 − confidence) over the evidence chain   # soft credit assignment
       θ_{t,f} ← update(1) for all contributors if success, else update(0, weight w_t)
+      for each answer superseded by a more confident one (never graded):          # censoring correction
+          θ_{t,f} ← update(calibration[bin(c)].mean)                                # impute E[correct | c]
       calibration[bin(c_e)] ← update(success, weight w)
 ```
 
@@ -46,13 +48,15 @@ LEARN(decision, report, success):
 | Exploration | Thompson sampling with **global-time** discounting | UCB; ε-greedy; per-observation discounting | Global-time decay restores variance for unused tools, so recovered tools are re-explored. TS composes naturally with Monte-Carlo constraint checks. |
 | Context | Family-level Beta with hierarchical pooling to the tool's global rate | Linear contextual bandits (LinTS) | Families are discrete and few. Pooling gives unseen or rare families a sensible prior. |
 | Credit assignment | Soft responsibilities ∝ (1 − confidence) | Uniform 1/k blame; ignore failures | Uniform blame over-penalised good tools in multi-tool plans. With it, the calibration conflated other types' errors and the VoI rule over-verified (development seed: stationary cost/success 4.13 → 3.80 m$ after the change). |
+| Superseded answers | Imputed with the calibrated P(correct \| confidence) (ablation A10) | Ignore them (v1) | When verification replaces an answer, only the replacement is graded. Ignoring the replaced answer hid exactly the mistakes verification caught: on a development seed, a tool with true quality 0.58 was estimated at 0.91. With imputation, success under drift is +1.5 points and calls are fewer, but cost per success is +0.38 m$, because ATLAS stops relying on cheap tools plus verification (E3). |
+| Candidate scoring | Only providers of the needed types and their input closure | Score every registered tool | Same decisions, less work: planning p95 at 512 tools fell from 27 ms to 15.5 ms (E4). |
 | Safe exploration | Sensitive tools use posterior means only | Exploring everything | Licensed or production-critical tools should not be used just to learn. |
 | Stopping | Calibrated VoI, triggered only below the request's own Q_min | Fixed confidence threshold | A fixed threshold ignored the SLO and over-verified on the development seed. |
 
 ## Complexity
 
 Let $m$ be the number of candidates kept per type, $|\hat Y^*|$ the size of the type closure, and $k$ the number of plans kept. Candidate
-filtering is $O(|T|)$, with posterior-utility sorting over providers per type. Branch-and-bound explores at most
+filtering is linear in the number of providers of the relevant types (not in the registry size), with posterior-utility sorting over providers per type. Branch-and-bound explores at most
 $O(m^{|\hat Y^*|})$ nodes but prunes hard, because the bound uses per-type minimum costs. Scoring is
 $O(k\cdot|P|\cdot S)$ for $S$ Monte-Carlo latency samples. E4 measures the end-to-end overhead as the registry grows.
 
@@ -62,6 +66,12 @@ $O(k\cdot|P|\cdot S)$ for $S$ Monte-Carlo latency samples. E4 measures the end-t
   same wrong source) are not modelled.
 * Credit assignment is heuristic. It needs a confidence signal that is informative about correctness.
 * Task understanding is a small supervised text classifier. Accuracy on held-out phrasings is about 0.88 exact-set, and
-  its errors cap every router that depends on it. An LLM-based understanding stage is a drop-in replacement but was
-  not evaluated (no paid APIs).
-* The simulator's parameters are hand-specified. External validity has to be established on real tool logs.
+  its errors cap every router that depends on it. E6 swaps in a local LLM and an oracle and sweeps understanding
+  accuracy.
+* The simulator's parameters are hand-specified. The live evaluation (`benchmarks/live`) runs real tools on generated
+  data, with injected latency and faults.
+* **Large registries of near-duplicate tools remain unsolved.** At 512 tools, success is 0.79 vs 0.91 at 12. Three
+  remedies were tried on development seeds and did not help, so they were dropped (see `research/hypotheses.md`):
+  * √N admission control (worse: it admits cheap duplicates before the genuine tools);
+  * pooled type-level quality priors;
+  * pessimistic constraints against the optimizer's curse.

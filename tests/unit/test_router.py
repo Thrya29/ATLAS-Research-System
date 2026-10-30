@@ -51,10 +51,34 @@ def test_unauthorized_and_open_circuit_filtered(small_registry):
 
     cb = CircuitBreakers(clock=lambda: 0.0, failure_threshold=1)
     cb.record("sql_cheap", False)
-    r = ATLASRouter(small_registry, FixedUnderstanding({"metrics"}), ATLASConfig(explore=False), cb)
+    r = ATLASRouter(small_registry, FixedUnderstanding({"table"}), ATLASConfig(explore=False), cb)
     d = r.route("q", RequestContext(role="analyst"))
     assert d.rejected["fin"] == "unauthorized" and d.rejected["sql_cheap"] == "circuit_open"
     assert d.plan.tools == ["sql"]
+
+
+def test_only_relevant_providers_are_scored(small_registry):
+    d = router(small_registry, {"number"}).route("q", RequestContext(role="analyst"))
+    # number's providers need table or scalars, so SQL tools (and fin, which provides table) are relevant;
+    # docs is never considered.
+    seen = {n for v in d.candidates.values() for n in v} | set(d.rejected)
+    assert "docs" not in seen and {"python", "calc", "sql"} <= seen and d.rejected.get("fin") == "unauthorized"
+
+
+@pytest.mark.parametrize("impute", [True, False])
+def test_superseded_answer_is_not_silently_ignored(small_registry, impute):
+    r = router(small_registry, {"metrics"}, impute_superseded=impute)
+    for _ in range(200):
+        r.calibration[0].update(0.0, r.now)  # very low confidence answers are wrong
+    d = r.route("q", RequestContext())
+    weak = ToolResult("sql_cheap", True, 10, confidence=0.05)
+    strong = ToolResult("sql", True, 10, confidence=0.95)
+    rep = ExecutionReport([weak, strong], d.plan.steps, {"metrics": strong}, 10, 0.5)
+    before = r._stats(small_registry.get("sql_cheap")).quality.mean("fam", r.now)
+    for _ in range(20):
+        r.observe(d, rep, True)  # verification rescued every task
+    after = r._stats(small_registry.get("sql_cheap")).quality.mean("fam", r.now)
+    assert (after < before - 0.2) if impute else after == pytest.approx(before, abs=0.02)
 
 
 def test_no_tool_query(small_registry):
