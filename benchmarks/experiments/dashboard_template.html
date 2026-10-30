@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS Results Dashboard</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f4f4f2; --surface-1: #fcfcfb; --surface-2: #f0efec; --line: #e1e0dc; --grid: #e9e8e4;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #6f6e69;
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+    --neutral: #a3a29c; --neutral-2: #c9c8c2; --pos: #2a78d6; --neg: #eb6834;
+    --seq-0: #cde2fb; --seq-1: #104281;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #121211; --surface-1: #1a1a19; --surface-2: #232321; --line: #2f2f2c; --grid: #2a2a28;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+      --neutral: #6f6e69; --neutral-2: #4a4a46; --pos: #3987e5; --neg: #d95926;
+      --seq-0: #184f95; --seq-1: #cde2fb;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #121211; --surface-1: #1a1a19; --surface-2: #232321; --line: #2f2f2c; --grid: #2a2a28;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --neutral: #6f6e69; --neutral-2: #4a4a46; --pos: #3987e5; --neg: #d95926;
+    --seq-0: #184f95; --seq-1: #cde2fb;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--text-primary); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Calibri, sans-serif; }
+  header { padding: 22px 24px 8px; max-width: 1280px; margin: 0 auto; display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  header h1 { margin: 0; font: 700 26px/1.2 Cambria, Georgia, serif; }
+  header p { margin: 4px 0 0; color: var(--text-secondary); max-width: 760px; }
+  header .spacer { flex: 1; }
+  button, select { font: inherit; color: inherit; background: var(--surface-1); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+  main { max-width: 1280px; margin: 0 auto; padding: 8px 24px 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); padding: 8px 16px 40px; } header { padding: 18px 16px 6px; } }
+  .card { background: var(--surface-1); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; min-width: 0; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h2 { margin: 0; font: 700 17px/1.3 Cambria, Georgia, serif; }
+  .card .sub { color: var(--text-secondary); font-size: 13px; margin: 4px 0 10px; }
+  .tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .tile .v { font: 700 34px/1.1 Cambria, Georgia, serif; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+  .tile .d { color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 4px 0 8px; font-size: 13px; color: var(--text-secondary); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; padding: 5px 12px; }
+  .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--text-primary); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--text-secondary); margin: 2px 0 6px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legend i.line { height: 3px; border-radius: 2px; vertical-align: 3px; }
+  .chart { position: relative; width: 100%; }
+  svg { display: block; width: 100%; overflow: visible; }
+  svg text { fill: var(--text-muted); font-size: 11.5px; font-family: inherit; }
+  svg text.lab { fill: var(--text-secondary); font-size: 12px; }
+  svg text.val { fill: var(--text-primary); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,.14); z-index: 10; display: none; max-width: 280px; }
+  .tip b { display: block; margin-bottom: 2px; }
+  .tip .r { display: flex; gap: 8px; justify-content: space-between; }
+  .tip .k { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+  .tip .k i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  details.tbl { margin-top: 10px; font-size: 13px; }
+  details.tbl summary { cursor: pointer; color: var(--text-secondary); }
+  details.tbl table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  details.tbl th, details.tbl td { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+  details.tbl th:first-child, details.tbl td:first-child { text-align: left; }
+  details.tbl th { color: var(--text-secondary); font-weight: 600; }
+  .note { color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 40px; color: var(--text-muted); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ATLAS Results Dashboard</h1>
+    <p>Every experiment in one place: simulator (20 seeds), live tools (10 seeds), ablations, scaling and the understanding stage. Hover any mark for exact values; each chart has a table view. Cost is a simulated per-call price in milli-USD.</p>
+  </div>
+  <div class="spacer"></div>
+  <button id="theme" aria-label="Toggle light or dark theme">◐ Theme</button>
+</header>
+<main id="main"></main>
+<footer>Generated by <code>python -m benchmarks.experiments.dashboard</code> from the committed result files in <code>benchmarks/reports/</code>.</footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  const t = store.get("atlas-dash-theme"); if (t) document.documentElement.dataset.theme = t;
+  document.getElementById("theme").onclick = () => {
+    const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next; store.set("atlas-dash-theme", next); renderAll();
+  };
+
+  function h(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) k === "class" ? (n.className = v) : k.startsWith("on") ? n.addEventListener(k.slice(2), v) : n.setAttribute(k, v);
+    for (const c of kids.flat()) if (c != null) n.append(c instanceof Node ? c : document.createTextNode(String(c)));
+    return n;
+  }
+  function s(tag, attrs = {}, text) {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  const f3 = (x) => x.toFixed(3), f2 = (x) => x.toFixed(2), f0 = (x) => Math.round(x).toLocaleString();
+
+  // ---------- tooltip
+  const tip = document.getElementById("tip");
+  function showTip(ev, title, rows) {
+    tip.replaceChildren(h("b", {}, title), ...rows.map(([k, v, color]) => h("div", { class: "r" }, h("span", { class: "k" }, color ? h("i", { style: `background:${color}` }) : null, k), h("span", {}, v))));
+    tip.style.display = "block";
+    const w = tip.offsetWidth, hgt = tip.offsetHeight;
+    let x = ev.clientX + 14, y = ev.clientY + 14;
+    if (x + w > innerWidth - 8) x = ev.clientX - w - 14;
+    if (y + hgt > innerHeight - 8) y = ev.clientY - hgt - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  }
+  const hideTip = () => (tip.style.display = "none");
+
+  function table(head, rows) {
+    return h("details", { class: "tbl" }, h("summary", {}, "Show table"),
+      h("table", {}, h("thead", {}, h("tr", {}, head.map((x) => h("th", {}, x)))), h("tbody", {}, rows.map((r) => h("tr", {}, r.map((x) => h("td", {}, x)))))));
+  }
+  function legend(items) {
+    return h("div", { class: "legend" }, items.map(([name, color, line, dash]) => h("span", {}, h("i", { class: line ? "line" : "", style: `background:${color};${dash ? "background:repeating-linear-gradient(90deg," + color + " 0 4px,transparent 4px 7px)" : ""}` }), name)));
+  }
+  function card(title, sub, wide) {
+    const c = h("section", { class: "card" + (wide ? " wide" : "") }, h("h2", {}, title), sub ? h("div", { class: "sub" }, sub) : null);
+    document.getElementById("main").append(c);
+    return c;
+  }
+  function svgBox(container, height) {
+    const width = Math.max(280, container.clientWidth || 600);
+    const svg = s("svg", { viewBox: `0 0 ${width} ${height}`, height, role: "img" });
+    return { svg, width, height };
+  }
+  function ticks(lo, hi, n = 5) {
+    const step = Math.pow(10, Math.floor(Math.log10((hi - lo) / n)));
+    const err = (hi - lo) / n / step, mult = err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1, st = step * mult;
+    const out = []; for (let v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) out.push(+v.toFixed(10)); return out;
+  }
+
+  // ---------- horizontal bars (supports negatives and CI whiskers)
+  function barsH(el, rows, { fmt = f3, domain, label = "value", height } = {}) {
+    const rowH = 30, top = 6, H = height || top + rows.length * rowH + 26;
+    const { svg, width } = svgBox(el, H);
+    const left = Math.min(150, width * 0.32), right = 54;
+    const lo = domain ? domain[0] : Math.min(0, ...rows.map((r) => r.lo ?? r.value));
+    const hi = domain ? domain[1] : Math.max(...rows.map((r) => r.hi ?? r.value)) * 1.04;
+    const X = (v) => left + ((v - lo) / (hi - lo)) * (width - left - right);
+    for (const tv of ticks(lo, hi)) {
+      svg.append(s("line", { x1: X(tv), x2: X(tv), y1: top, y2: H - 22, stroke: css("--grid"), "stroke-width": 1 }));
+      svg.append(s("text", { x: X(tv), y: H - 6, "text-anchor": "middle" }, fmt === f0 ? f0(tv) : +tv.toFixed(3)));
+    }
+    rows.forEach((r, i) => {
+      const y = top + i * rowH, bh = 18, x0 = X(Math.max(lo, 0)), x1 = X(r.value);
+      svg.append(s("text", { class: "lab", x: left - 8, y: y + bh / 2 + 4, "text-anchor": "end" }, r.label));
+      const bx = Math.min(x0, x1), bw = Math.max(1, Math.abs(x1 - x0));
+      const rad = Math.min(4, bw / 2);
+      // rounded only at the data end
+      const d = r.value >= 0
+        ? `M${bx},${y} h${bw - rad} a${rad},${rad} 0 0 1 ${rad},${rad} v${bh - 2 * rad} a${rad},${rad} 0 0 1 -${rad},${rad} h-${bw - rad} z`
+        : `M${bx + bw},${y} h-${bw - rad} a${rad},${rad} 0 0 0 -${rad},${rad} v${bh - 2 * rad} a${rad},${rad} 0 0 0 ${rad},${rad} h${bw - rad} z`;
+      svg.append(s("path", { d, fill: r.color }));
+      if (r.lo != null) {
+        svg.append(s("line", { x1: X(r.lo), x2: X(r.hi), y1: y + bh / 2, y2: y + bh / 2, stroke: css("--text-secondary"), "stroke-width": 1.5 }));
+        for (const v of [r.lo, r.hi]) svg.append(s("line", { x1: X(v), x2: X(v), y1: y + 5, y2: y + bh - 5, stroke: css("--text-secondary"), "stroke-width": 1.5 }));
+      }
+      // Labels always sit right of the bar end (or of zero, for negative bars) so they never reach the category names.
+      const end = (r.value >= 0 ? Math.max(x1, r.hi != null ? X(r.hi) : x1) : Math.max(x0, r.hi != null ? X(r.hi) : x0)) + 6;
+      if (r.showValue !== false) svg.append(s("text", { class: "val", x: end, y: y + bh / 2 + 4, "text-anchor": "start" }, fmt(r.value)));
+      const hit = s("rect", { x: left, y: y - 4, width: width - left, height: rowH, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, r.label, [[label, fmt(r.value), r.color], ...(r.lo != null ? [["95% CI", `${fmt(r.lo)} – ${fmt(r.hi)}`]] : []), ...(r.extra || [])]));
+      hit.addEventListener("mouseleave", hideTip);
+      svg.append(hit);
+    });
+    el.append(svg);
+  }
+
+  // ---------- line chart with crosshair
+  function lines(el, series, { xs, xfmt = (x) => x, yfmt = f3, ydomain, height = 300, vlines = [], xLabel, ylog = false, xcats } = {}) {
+    const { svg, width } = svgBox(el, height);
+    const left = 44, right = 92, top = 10, bottom = 34;
+    const allY = series.flatMap((sr) => sr.values);
+    const lo = ydomain ? ydomain[0] : Math.min(...allY), hi = ydomain ? ydomain[1] : Math.max(...allY);
+    const xmin = xcats ? 0 : Math.min(...xs), xmax = xcats ? xs.length - 1 : Math.max(...xs);
+    const xp = (i) => (xcats ? i : xs[i]);
+    const X = (v) => left + ((ylog ? Math.log(v) - Math.log(xmin) : v - xmin) / (ylog ? Math.log(xmax) - Math.log(xmin) : xmax - xmin)) * (width - left - right);
+    const Y = (v) => top + (1 - (v - lo) / (hi - lo)) * (height - top - bottom);
+    for (const tv of ticks(lo, hi, 4)) {
+      svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }));
+      svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, yfmt === f0 ? f0(tv) : +tv.toFixed(3)));
+    }
+    const xt = xcats ? xs.map((_, i) => i) : ylog ? xs : ticks(xmin, xmax, 6);
+    xt.forEach((tv) => svg.append(s("text", { x: X(tv), y: height - bottom + 16, "text-anchor": "middle" }, xcats ? xs[tv] : xfmt(tv))));
+    if (xLabel) svg.append(s("text", { x: left + (width - left - right) / 2, y: height - 2, "text-anchor": "middle" }, xLabel));
+    vlines.forEach((v, i) => {
+      svg.append(s("line", { x1: X(v.x), x2: X(v.x), y1: top, y2: height - bottom, stroke: css("--text-muted"), "stroke-dasharray": "3 4", "stroke-width": 1 }));
+      svg.append(s("text", { x: X(v.x) + 4, y: top + 12 + (i % 2) * 14 }, `${i + 1}`));
+    });
+    series.forEach((sr) => {
+      const d = sr.values.map((v, i) => `${i ? "L" : "M"}${X(xp(i)).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+      svg.append(s("path", { d, fill: "none", stroke: sr.color, "stroke-width": sr.emph ? 2.5 : 2, "stroke-dasharray": sr.dash ? "5 4" : "none", "stroke-linejoin": "round" }));
+      if (sr.markers) sr.values.forEach((v, i) => svg.append(s("circle", { cx: X(xp(i)), cy: Y(v), r: 4.5, fill: sr.color, stroke: css("--surface-1"), "stroke-width": 2 })));
+    });
+    // direct end labels, nudged apart
+    const ends = series.map((sr) => ({ name: sr.name, y: Y(sr.values[sr.values.length - 1]), color: sr.color })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    ends.forEach((e) => svg.append(s("text", { class: "lab", x: width - right + 6, y: e.y + 4 }, e.name)));
+    const cross = s("line", { y1: top, y2: height - bottom, stroke: css("--text-secondary"), "stroke-width": 1, visibility: "hidden" });
+    svg.append(cross);
+    const hit = s("rect", { x: left, y: top, width: width - left - right, height: height - top - bottom, fill: "transparent" });
+    hit.addEventListener("mousemove", (ev) => {
+      const rect = svg.getBoundingClientRect(), px = ((ev.clientX - rect.left) / rect.width) * width;
+      let best = 0, bd = Infinity;
+      xs.forEach((_, i) => { const d = Math.abs(X(xp(i)) - px); if (d < bd) { bd = d; best = i; } });
+      cross.setAttribute("x1", X(xp(best))); cross.setAttribute("x2", X(xp(best))); cross.setAttribute("visibility", "visible");
+      showTip(ev, xcats ? xs[best] : xfmt(xs[best]), series.map((sr) => [sr.name, yfmt(sr.values[best]), sr.color]));
+    });
+    hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
+    svg.append(hit);
+    el.append(svg);
+  }
+
+  // ---------- grouped vertical bars
+  function grouped(el, cats, series, { yfmt = f2, ydomain = [0, 1], height = 300 } = {}) {
+    const { svg, width } = svgBox(el, height);
+    const left = 40, right = 8, top = 10, bottom = 44;
+    const Y = (v) => top + (1 - (v - ydomain[0]) / (ydomain[1] - ydomain[0])) * (height - top - bottom);
+    for (const tv of ticks(ydomain[0], ydomain[1], 5)) {
+      svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }));
+      svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, +tv.toFixed(2)));
+    }
+    const gw = (width - left - right) / cats.length, pad = gw * 0.18, bw = (gw - 2 * pad - (series.length - 1) * 2) / series.length;
+    cats.forEach((c, ci) => {
+      const gx = left + ci * gw;
+      const words = c.split(" "), mid = Math.ceil(words.length / 2);
+      const lines2 = c.length > 14 && words.length > 1 ? [words.slice(0, mid).join(" "), words.slice(mid).join(" ")] : [c];
+      lines2.forEach((ln, li) => svg.append(s("text", { class: "lab", x: gx + gw / 2, y: height - bottom + 16 + li * 14, "text-anchor": "middle" }, ln)));
+      series.forEach((sr, si) => {
+        const v = sr.values[ci], x = gx + pad + si * (bw + 2), y = Y(v), hgt = Y(ydomain[0]) - y, rad = Math.min(4, bw / 2, hgt);
+        svg.append(s("path", { d: `M${x},${Y(ydomain[0])} v-${hgt - rad} a${rad},${rad} 0 0 1 ${rad},-${rad} h${bw - 2 * rad} a${rad},${rad} 0 0 1 ${rad},${rad} v${hgt - rad} z`, fill: sr.color }));
+      });
+      const hit = s("rect", { x: gx, y: top, width: gw, height: height - top - bottom, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, c, series.map((sr) => [sr.name, yfmt(sr.values[ci]), sr.color])));
+      hit.addEventListener("mouseleave", hideTip);
+      svg.append(hit);
+    });
+    el.append(svg);
+  }
+
+  // ---------- heatmap (sequential, one hue)
+  function heatmap(el, rows, cols, values) {
+    const cellH = 34, top = 4, left = 150, H = top + rows.length * cellH + 30;
+    const { svg, width } = svgBox(el, H);
+    const cw = (width - left) / cols.length;
+    const lo = css("--seq-0"), hi = css("--seq-1");
+    const mix = (a, b, t) => { const p = (x) => [1, 3, 5].map((i) => parseInt(x.slice(i, i + 2), 16)); const A = p(a), B = p(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(",")})`; };
+    const dark = (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+    rows.forEach((r, ri) => {
+      svg.append(s("text", { class: "lab", x: left - 8, y: top + ri * cellH + cellH / 2 + 4, "text-anchor": "end" }, r));
+      cols.forEach((c, ci) => {
+        const v = values[ri][ci], x = left + ci * cw, y = top + ri * cellH;
+        svg.append(s("rect", { x: x + 1, y: y + 1, width: cw - 2, height: cellH - 2, rx: 3, fill: mix(lo, hi, v) }));
+        const strong = dark ? v < 0.55 : v > 0.55;
+        svg.append(s("text", { x: x + cw / 2, y: y + cellH / 2 + 4, "text-anchor": "middle", style: `fill:${strong ? "#ffffff" : "#0b0b0b"};font-size:12px` }, v.toFixed(2)));
+        const hit = s("rect", { x, y, width: cw, height: cellH, fill: "transparent" });
+        hit.addEventListener("mousemove", (ev) => showTip(ev, `${r} · ${c}`, [["success", v.toFixed(3)]]));
+        hit.addEventListener("mouseleave", hideTip);
+        svg.append(hit);
+      });
+    });
+    cols.forEach((c, ci) => svg.append(s("text", { class: "lab", x: left + ci * cw + cw / 2, y: H - 8, "text-anchor": "middle" }, c)));
+    el.append(svg);
+  }
+
+  // ---------- trade-off scatter
+  function scatter(el, atlas, base, height = 320) {
+    const { svg, width } = svgBox(el, height);
+    const left = 48, right = 20, top = 12, bottom = 40;
+    const xs = [...atlas, ...base].map((p) => p.cost), ys = [...atlas, ...base].map((p) => p.success);
+    const xlo = Math.floor(Math.min(...xs) * 2) / 2 - 0.25, xhi = Math.ceil(Math.max(...xs) * 2) / 2 + 0.25, ylo = Math.floor(Math.min(...ys) * 20) / 20 - 0.02, yhi = 0.92;
+    const X = (v) => left + ((v - xlo) / (xhi - xlo)) * (width - left - right), Y = (v) => top + (1 - (v - ylo) / (yhi - ylo)) * (height - top - bottom);
+    for (const tv of ticks(ylo, yhi, 4)) { svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") })); svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, +tv.toFixed(2))); }
+    for (const tv of ticks(xlo, xhi, 5)) svg.append(s("text", { x: X(tv), y: height - bottom + 16, "text-anchor": "middle" }, +tv.toFixed(2)));
+    svg.append(s("text", { x: left + (width - left - right) / 2, y: height - 4, "text-anchor": "middle" }, "Cost per successful task (m$) — lower is better"));
+    svg.append(s("path", { d: atlas.map((p, i) => `${i ? "L" : "M"}${X(p.cost)},${Y(p.success)}`).join(""), fill: "none", stroke: css("--series-1"), "stroke-width": 2 }));
+    const dot = (p, color, label, rows, anchor) => {
+      svg.append(s("circle", { cx: X(p.cost), cy: Y(p.success), r: 6, fill: color, stroke: css("--surface-1"), "stroke-width": 2 }));
+      svg.append(s("text", { class: "lab", x: X(p.cost) + (anchor === "end" ? -10 : 10), y: Y(p.success) - 8, "text-anchor": anchor || "start" }, label));
+      const hit = s("circle", { cx: X(p.cost), cy: Y(p.success), r: 14, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, label, rows)); hit.addEventListener("mouseleave", hideTip); svg.append(hit);
+    };
+    atlas.forEach((p) => dot(p, css("--series-1"), `ATLAS Qmin ${p.q}`, [["success", f3(p.success), css("--series-1")], ["cost / success", f2(p.cost) + " m$"]], "end"));
+    base.forEach((p) => dot(p, css("--neutral"), p.name, [["success", f3(p.success), css("--neutral")], ["cost / success", f2(p.cost) + " m$"]]));
+    el.append(svg);
+  }
+
+  // =================================================================== page
+  const D = DATA;
+  let state = { exp: "E2", metric: "success" };
+  function renderAll() {
+    hideTip();
+    const main = document.getElementById("main");
+    main.replaceChildren();
+    const ATL = css("--series-1"), NEU = css("--neutral");
+
+    // ---- tiles
+    const e1 = D.comparison.E1.success, e2 = D.comparison.E2.success, lv = D.live.routers;
+    const bestBase = (o) => Object.entries(o).filter(([k]) => !["ATLAS", "Oracle"].includes(k)).sort((a, b) => b[1].mean - a[1].mean)[0];
+    const [b1n, b1] = bestBase(e1), [b2n, b2] = bestBase(e2);
+    const liveBase = Object.entries(lv).filter(([k]) => !k.startsWith("ATLAS")).sort((a, b) => b[1].success.mean - a[1].success.mean)[0];
+    main.append(h("div", { class: "tiles" },
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(e1.ATLAS.mean)), h("div", { class: "l" }, "ATLAS success, stable tools (E1)"), h("div", { class: "d" }, `best baseline ${b1n}: ${f3(b1.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(e2.ATLAS.mean)), h("div", { class: "l" }, "ATLAS success under drift (E2)"), h("div", { class: "d" }, `best baseline ${b2n}: ${f3(b2.mean)} · Oracle ${f3(e2.Oracle.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(lv.ATLAS.success.mean)), h("div", { class: "l" }, `ATLAS success on real tools (${D.live.seeds} seeds)`), h("div", { class: "d" }, `best baseline ${liveBase[0]}: ${f3(liveBase[1].success.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(lv.ATLAS.incident.mean)), h("div", { class: "l" }, "…during the live database incident"), h("div", { class: "d" }, `${liveBase[0]}: ${f3(liveBase[1].incident.mean)}`)),
+    ));
+
+    // ---- router comparison with filters
+    {
+      const c = card("How every router compares", `Mean over ${D.meta.seeds} seeds with 95% bootstrap CI. ATLAS highlighted; the Oracle knows true requirements and current tool parameters.`, true);
+      const segExp = h("span", { class: "seg", role: "group", "aria-label": "Experiment" }, [["E1", "E1 stable tools"], ["E2", "E2 drift"]].map(([k, l]) =>
+        h("button", { "aria-pressed": String(state.exp === k), onclick: () => { state.exp = k; renderAll(); } }, l)));
+      const sel = h("select", { "aria-label": "Metric", onchange: (e) => { state.metric = e.target.value; renderAll(); } },
+        Object.entries(D.metrics).map(([k, l]) => { const o = h("option", { value: k }, l); if (k === state.metric) o.selected = true; return o; }));
+      c.append(h("div", { class: "filters" }, "Experiment", segExp, "Metric", sel));
+      const m = D.comparison[state.exp][state.metric], better = state.metric === "success" ? -1 : 1;
+      const rows = Object.entries(m).sort((a, b) => better * (a[1].mean - b[1].mean)).map(([k, v]) => ({
+        label: k, value: v.mean, lo: v.lo, hi: v.hi, color: k === "ATLAS" ? ATL : k === "Oracle" ? css("--neutral-2") : NEU }));
+      const fmt = state.metric.startsWith("latency") ? f0 : state.metric === "success" ? f3 : f2;
+      const el = h("div", { class: "chart" }); c.append(el);
+      barsH(el, rows, { fmt, label: D.metrics[state.metric], domain: state.metric === "success" ? [0, 1] : undefined });
+      c.append(h("div", { class: "note" }, state.metric === "success" ? "Higher is better." : "Lower is better. Sorted best first."));
+      c.append(table(["Router", "Mean", "CI low", "CI high"], rows.map((r) => [r.label, fmt(r.value), fmt(r.lo), fmt(r.hi)])));
+    }
+
+    // ---- drift timeline
+    {
+      const c = card("Under drift, ATLAS stays near the oracle", "Rolling task success (window 100) over the 3000-task E2 stream, mean of seeds. Dashed verticals mark drift events.", true);
+      const order = ["ATLAS", "B4 Static", "B5 Bandit", "B2 Supervised"], cols = [ATL, css("--series-2"), css("--series-3"), css("--series-4")];
+      const series = order.map((n, i) => ({ name: n, values: D.curves[n], color: cols[i], emph: n === "ATLAS" }));
+      series.push({ name: "Oracle", values: D.curves.Oracle, color: css("--neutral"), dash: true });
+      c.append(legend(series.map((sr) => [sr.name, sr.color, true, sr.dash])));
+      const xs = D.curves.ATLAS.map((_, i) => i * 25 + 100);
+      const el = h("div", { class: "chart" }); c.append(el);
+      lines(el, series, { xs, xfmt: (x) => "task " + f0(x), ydomain: [0.4, 1.0], vlines: D.drifts.map((d) => ({ x: d.t })), xLabel: "Task index" });
+      c.append(h("div", { class: "note" }, D.drifts.map((d, i) => `${i + 1}: t=${d.t} ${d.label}`).join(" · ")));
+      c.append(table(["Task", ...series.map((s) => s.name)], xs.filter((_, i) => i % 10 === 0).map((x, j) => [f0(x), ...series.map((s) => f3(s.values[j * 10]))])));
+    }
+
+    // ---- trade-off
+    {
+      const c = card("The quality target sets the cost trade-off", "Under drift. ATLAS at four quality targets (Qmin) vs the learned baselines. Up and left is better.");
+      c.append(legend([["ATLAS (Qmin 0.6 → 0.9)", ATL], ["Baselines", NEU]]));
+      const el = h("div", { class: "chart" }); c.append(el);
+      scatter(el, D.tradeoff.atlas, D.tradeoff.baselines);
+      c.append(h("div", { class: "note" }, "At the default Qmin 0.8 ATLAS costs about the same per success as B2/B5; at 0.6–0.7 it beats them on both axes (points chosen after the sweep)."));
+      c.append(table(["Point", "Success", "Cost / success (m$)"], [...D.tradeoff.atlas.map((p) => [`ATLAS Qmin ${p.q}`, f3(p.success), f2(p.cost)]), ...D.tradeoff.baselines.map((p) => [p.name, f3(p.success), f2(p.cost)])]));
+    }
+
+    // ---- ablations
+    {
+      const c = card("Plan structure does most of the work", "Success lost when one component is removed (E3, drift, paired over seeds). Negative = removing it raised success but cost more.");
+      c.append(legend([["Component adds success", css("--pos")], ["Trade-off: saves cost", css("--neg")]]));
+      const rows = D.ablations.map((a) => ({ label: a.name, value: a.delta.mean, lo: a.delta.lo, hi: a.delta.hi, color: a.delta.mean >= 0 ? css("--pos") : css("--neg"),
+        extra: [["cost / success change if removed", (a.cost_saved >= 0 ? "+" : "") + f2(a.cost_saved) + " m$"]] }));
+      const el = h("div", { class: "chart" }); c.append(el);
+      barsH(el, rows, { fmt: (x) => (x >= 0 ? "+" : "") + f3(x), label: "Δ success" });
+      c.append(table(["Removed", "Δ success", "CI", "Δ cost / success if removed"], D.ablations.map((a) => [a.name, f3(a.delta.mean), `${f3(a.delta.lo)} – ${f3(a.delta.hi)}`, f2(a.cost_saved)])));
+    }
+
+    // ---- scaling (two charts, never a dual axis)
+    {
+      const c = card("Scaling: accuracy falls with hundreds of look-alike tools", "E4: distractor tools added to the 12-tool registry (5 seeds, 600 tasks). Unsolved — see README.", true);
+      const names = ["ATLAS", "B5 Bandit", "B3 Retrieval"], cols = [ATL, css("--series-3"), css("--series-4")];
+      const xs = D.scaling.ATLAS.map((p) => p.tools);
+      c.append(legend(names.map((n, i) => [n, cols[i], true])));
+      const wrap = h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px" });
+      const a = h("div", { class: "chart" }), b = h("div", { class: "chart" });
+      wrap.append(h("div", {}, h("div", { class: "sub" }, "Task success"), a), h("div", {}, h("div", { class: "sub" }, "Planning time p95 (ms)"), b));
+      c.append(wrap);
+      lines(a, names.map((n, i) => ({ name: n, values: D.scaling[n].map((p) => p.success), color: cols[i], markers: true, emph: n === "ATLAS" })), { xs, ylog: true, xfmt: (x) => x + " tools", ydomain: [0, 1], height: 260, xLabel: "Registry size (log scale)" });
+      lines(b, names.map((n, i) => ({ name: n, values: D.scaling[n].map((p) => p.p95), color: cols[i], markers: true, emph: n === "ATLAS" })), { xs, ylog: true, xfmt: (x) => x + " tools", yfmt: f2, ydomain: [0, Math.ceil(Math.max(...names.flatMap((n) => D.scaling[n].map((p) => p.p95))) / 5) * 5], height: 260, xLabel: "Registry size (log scale)" });
+      c.append(table(["Tools", ...names.map((n) => n + " success"), ...names.map((n) => n + " p95 ms")], xs.map((x, i) => [x, ...names.map((n) => f3(D.scaling[n][i].success)), ...names.map((n) => f2(D.scaling[n][i].p95))])));
+    }
+
+    // ---- live
+    {
+      const c = card("Real tools: ATLAS routes around a database incident", `Live evaluation, ${D.live.seeds} seeds × 400 tasks; real SQLite, retrieval, log scan and Python sandbox, with injected faults.`);
+      const names = Object.keys(D.live.routers).filter((n) => n !== "ATLAS v1");
+      const sorted = names.sort((a, b) => D.live.routers[a].success.mean - D.live.routers[b].success.mean);
+      const series = [{ name: "Overall success", values: sorted.map((n) => D.live.routers[n].success.mean), color: ATL }, { name: "During DB incident", values: sorted.map((n) => D.live.routers[n].incident.mean), color: css("--series-2") }];
+      c.append(legend(series.map((sr) => [sr.name, sr.color])));
+      const el = h("div", { class: "chart" }); c.append(el);
+      grouped(el, sorted, series);
+      c.append(table(["Router", "Success", "CI", "During incident", "Cost / success (m$)"], sorted.map((n) => { const r = D.live.routers[n]; return [n, f3(r.success.mean), `${f3(r.success.lo)} – ${f3(r.success.hi)}`, f3(r.incident.mean), f2(r.cost)]; })));
+    }
+    {
+      const c = card("Live success by question type", "Darker = higher success. B5 cannot plan SQL → compute, so it fails every calculation question.");
+      const names = Object.keys(D.live.routers).filter((n) => n !== "ATLAS v1");
+      const el = h("div", { class: "chart" }); c.append(el);
+      heatmap(el, names, D.live.families, names.map((n) => D.live.routers[n].family));
+      c.append(table(["Router", ...D.live.families], names.map((n) => [n, ...D.live.routers[n].family.map(f3)])));
+    }
+
+    // ---- understanding
+    {
+      const c = card("The lead holds at every level of query understanding", "E6: same simulator and routers, understanding stage swapped (5 seeds × 400 tasks). A small local LLM is the weakest option.", true);
+      const names = ["ATLAS", "B4 Static", "B5 Bandit"], cols = [ATL, css("--series-2"), css("--series-3")];
+      const series = names.map((n, i) => ({ name: n, values: D.understanding.routers[n], color: cols[i], markers: true, emph: n === "ATLAS" }));
+      c.append(legend(series.map((sr) => [sr.name, sr.color, true])));
+      const xs = D.understanding.levels.map((l, i) => `${l} (acc ${D.understanding.accuracy[i].toFixed(2)})`);
+      const el = h("div", { class: "chart" }); c.append(el);
+      lines(el, series, { xs, xcats: true, ydomain: [0.4, 1.0], height: 280 });
+      c.append(table(["Understanding", "Exact-set accuracy", ...names], D.understanding.levels.map((l, i) => [l, f2(D.understanding.accuracy[i]), ...names.map((n) => f3(D.understanding.routers[n][i]))])));
+    }
+  }
+  renderAll();
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 150); });
+})();
+</script>
+</body>
+</html>

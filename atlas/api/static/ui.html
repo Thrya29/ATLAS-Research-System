@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS Router Console</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1b1f2a; --ink2: #3a4256; --muted: #5f6b7f; --line: #dde2ea;
+    --soft: #eef1f5; --amber: #c9861f; --amber-bg: #fbf1df; --teal: #1f857a; --teal-bg: #e1f2ef;
+    --rust: #b8452f; --rust-bg: #f8e4df; --slate: #8a94a6; --focus: #1f857a;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151c; --panel: #1b1f2a; --ink: #eef1f5; --ink2: #c9d0dc; --muted: #9aa4b5; --line: #2e3443;
+      --soft: #242a37; --amber: #e8a33d; --amber-bg: #3a2f1c; --teal: #3cbfae; --teal-bg: #183330;
+      --rust: #e07a62; --rust-bg: #3a221d; --slate: #8a94a6; --focus: #3cbfae;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151c; --panel: #1b1f2a; --ink: #eef1f5; --ink2: #c9d0dc; --muted: #9aa4b5; --line: #2e3443;
+    --soft: #242a37; --amber: #e8a33d; --amber-bg: #3a2f1c; --teal: #3cbfae; --teal-bg: #183330;
+    --rust: #e07a62; --rust-bg: #3a221d; --slate: #8a94a6; --focus: #3cbfae;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Calibri, sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
+  header h1 { font: 700 20px/1.2 Cambria, Georgia, serif; margin: 0; }
+  header > div:first-child { min-width: 0; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  header .spacer { flex: 1; }
+  label.key { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+  input, select, button, textarea { font: inherit; color: inherit; }
+  input[type=password], input[type=text] { background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; width: 150px; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; padding: 20px 24px 40px; max-width: 1400px; margin: 0 auto; }
+  @media (max-width: 980px) { main { grid-template-columns: minmax(0, 1fr); padding: 16px; } header { padding: 12px 16px; } .timeline .tl { grid-template-columns: 110px minmax(0, 1fr) 76px; } }
+  .panel { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .panel + .panel { margin-top: 16px; }
+  h2 { font: 700 16px/1.3 Cambria, Georgia, serif; margin: 0 0 12px; }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 18px 0 8px; font-weight: 600; }
+  textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+  .chip { max-width: 100%; text-align: left; background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; color: var(--ink2); }
+  .chip:hover { border-color: var(--teal); }
+  .controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 14px; }
+  @media (max-width: 640px) { .controls { grid-template-columns: 1fr; } }
+  .ctl label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+  .ctl output { color: var(--ink); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--teal); }
+  .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; align-items: center; }
+  button { border-radius: 9px; padding: 8px 16px; border: 1px solid var(--line); background: var(--soft); cursor: pointer; }
+  button.primary { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+  button:disabled { opacity: .55; cursor: wait; }
+  .status { font-size: 13px; color: var(--muted); }
+  .err { color: var(--rust); }
+  .empty { color: var(--muted); padding: 28px 0; text-align: center; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .tile { background: var(--soft); border-radius: 10px; padding: 10px 14px; }
+  .tile .v { font: 700 22px/1.2 Cambria, Georgia, serif; font-variant-numeric: tabular-nums; }
+  .tile .l { font-size: 12px; color: var(--muted); }
+  .badge { display: inline-block; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; }
+  .ok { background: var(--teal-bg); color: var(--teal); }
+  .warn { background: var(--amber-bg); color: var(--amber); }
+  .bad { background: var(--rust-bg); color: var(--rust); }
+  .neutral { background: var(--soft); color: var(--ink2); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+  .lvl { display: flex; flex-direction: column; gap: 8px; }
+  .arrow { align-self: center; color: var(--slate); font-size: 22px; }
+  .node { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--panel); min-width: 150px; }
+  .node.primary { border-color: var(--teal); }
+  .node.verification { border-color: var(--amber); border-style: dashed; }
+  .node.fallback { border-color: var(--rust); border-style: dashed; }
+  .node .t { font-weight: 600; font-family: var(--mono); font-size: 13px; }
+  .node .s { font-size: 12px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  #stats td, #stats th { padding: 6px 4px; }
+  th { text-align: left; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); padding: 6px 6px; }
+  td { border-bottom: 1px solid var(--line); padding: 6px 6px; vertical-align: top; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .mono { font-family: var(--mono); font-size: 12.5px; }
+  .bar { height: 8px; border-radius: 4px; background: var(--soft); position: relative; min-width: 60px; }
+  .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--teal); }
+  .bar.amber > i { background: var(--amber); }
+  .bar.rust > i { background: var(--rust); }
+  .timeline .tl { display: grid; grid-template-columns: 150px minmax(0, 1fr) 90px; gap: 10px; align-items: center; margin: 6px 0; font-size: 13px; }
+  .timeline .track { height: 14px; background: var(--soft); border-radius: 4px; position: relative; }
+  .timeline .track > i { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 4px; background: var(--teal); }
+  .timeline .track > i.f { background: var(--rust); }
+  details { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; margin: 8px 0; }
+  summary { cursor: pointer; font-size: 13px; }
+  pre { white-space: pre-wrap; word-break: break-word; font-family: var(--mono); font-size: 12px; margin: 8px 0 0; max-height: 260px; overflow: auto; }
+  .hit { background: var(--soft); border-radius: 8px; padding: 6px 10px; margin: 6px 0; font-size: 13px; }
+  .hit .src { color: var(--muted); font-size: 12px; }
+  .cands { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .cand { background: var(--soft); border-radius: 10px; padding: 8px 12px; }
+  .cand .ty { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .cand .tool { font-family: var(--mono); font-size: 12.5px; }
+  .cand .tool.chosen { color: var(--teal); font-weight: 700; }
+  .history li { font-size: 13px; margin: 4px 0; list-style: none; cursor: pointer; }
+  .history { padding: 0; margin: 0; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ATLAS Router Console</h1>
+    <div class="sub">See how each query is planned, constrained, executed, verified and learned from</div>
+  </div>
+  <div class="spacer"></div>
+  <label class="key">API key <input id="key" type="password" autocomplete="off" value="dev-key" aria-label="API key"></label>
+  <button id="theme" title="Toggle light/dark" aria-label="Toggle light or dark theme">◐</button>
+</header>
+
+<main>
+  <section>
+    <div class="panel">
+      <h2>Ask</h2>
+      <textarea id="query" aria-label="Query">Calculate the percentage change in revenue between Q1 and Q2</textarea>
+      <div class="chips" id="examples"></div>
+      <div class="controls">
+        <div class="ctl"><label for="q">Quality target (Qmin) <output id="qv"></output></label><input id="q" type="range" min="0.5" max="0.95" step="0.05" value="0.8"></div>
+        <div class="ctl"><label for="lat">Latency budget <output id="latv"></output></label><input id="lat" type="range" min="200" max="5000" step="100" value="1500"></div>
+        <div class="ctl"><label for="v">Value of a correct answer <output id="vv"></output></label><input id="v" type="range" min="0.01" max="0.5" step="0.01" value="0.05"></div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="run">Plan and run</button>
+        <button id="plan">Plan only</button>
+        <span class="status" id="status" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="panel" id="result">
+      <div class="empty">Run a query to see the decision.</div>
+    </div>
+  </section>
+
+  <aside>
+    <div class="panel">
+      <div class="row" style="justify-content: space-between;"><h2 style="margin:0">What ATLAS has learned</h2><button id="refresh" title="Refresh">↻</button></div>
+      <p class="note">Posterior means per tool. They change as you run queries and give feedback.</p>
+      <div id="stats"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="panel">
+      <h2>This session</h2>
+      <ul class="history" id="history"><li class="status">No requests yet.</li></ul>
+    </div>
+  </aside>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const EXAMPLES = [
+    "Calculate the percentage change in revenue between Q1 and Q2",
+    "What does our travel policy say about reimbursement limits?",
+    "Why is the checkout service throwing errors? Check the logs and the runbook",
+    "What is the latest news about the EU AI Act?",
+    "Fit a trend line to weekly signups for the enterprise segment",
+    "Explain TCP in simple terms",
+  ];
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+  };
+
+  // ---- small DOM helper: never uses innerHTML for data coming from the API
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v;
+      else if (k === "style") n.setAttribute("style", v);
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+    return n;
+  }
+  const fmt = {
+    usd: (x) => (x == null ? "–" : (x * 1000).toFixed(2) + " m$"),
+    pct: (x) => (x == null ? "–" : (100 * x).toFixed(1) + "%"),
+    ms: (x) => (x == null ? "–" : x < 10 ? x.toFixed(2) + " ms" : Math.round(x) + " ms"),
+    p: (x) => (x == null ? "–" : Number(x).toFixed(2)),
+  };
+  // Tool names may wrap only after an underscore, never mid-word.
+  const toolName = (n) => n.split("_").flatMap((part, i, a) => (i < a.length - 1 ? [part + "_", el("wbr")] : [part]));
+  function bar(frac, cls = "") {
+    return el("div", { class: "bar " + cls }, el("i", { style: `width:${Math.max(0, Math.min(1, frac)) * 100}%` }));
+  }
+
+  // ---- theme
+  const saved = store.get("atlas-theme");
+  if (saved) document.documentElement.dataset.theme = saved;
+  $("theme").onclick = () => {
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    const cur = document.documentElement.dataset.theme || (dark ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    store.set("atlas-theme", next);
+  };
+
+  // ---- controls
+  const k = store.get("atlas-key");
+  if (k) $("key").value = k;
+  $("key").onchange = () => store.set("atlas-key", $("key").value);
+  EXAMPLES.forEach((q) => $("examples").append(el("button", { class: "chip", type: "button", onclick: () => { $("query").value = q; } }, q)));
+  const sync = () => {
+    $("qv").textContent = Number($("q").value).toFixed(2);
+    $("latv").textContent = $("lat").value + " ms";
+    $("vv").textContent = "$" + Number($("v").value).toFixed(2);
+  };
+  ["q", "lat", "v"].forEach((id) => $(id).addEventListener("input", sync));
+  sync();
+
+  async function api(path, body) {
+    const res = await fetch(path, {
+      method: body ? "POST" : "GET",
+      headers: { "X-API-Key": $("key").value, ...(body ? { "Content-Type": "application/json" } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail ? (typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)) : res.status + " " + res.statusText);
+    return data;
+  }
+
+  // ---- rendering
+  function levels(plan) {
+    const lv = [];
+    plan.forEach((s, i) => { lv[i] = s.depends_on.length ? 1 + Math.max(...s.depends_on.map((d) => lv[d])) : 0; });
+    const cols = [];
+    plan.forEach((s, i) => { (cols[lv[i]] ||= []).push(s); });
+    return cols;
+  }
+
+  function renderDecision(d, ex) {
+    const box = $("result");
+    box.replaceChildren();
+    const sat = d.constraints_satisfied;
+    box.append(el("div", { class: "row", style: "justify-content:space-between" },
+      el("h2", { style: "margin:0" }, "Decision"),
+      el("span", { class: "badge " + (d.plan.length === 0 ? "neutral" : sat ? "ok" : "warn") },
+        d.plan.length === 0 ? "no tools needed" : sat ? "constraints satisfied" : "no plan met every constraint")));
+
+    box.append(el("h3", {}, "1 · Understanding"));
+    box.append(el("div", { class: "row" }, "Task family ", el("span", { class: "badge neutral" }, d.family || "–"), " needs ",
+      d.required_types.length ? d.required_types.map((t) => el("span", { class: "badge ok" }, t)) : el("span", { class: "badge neutral" }, "nothing external")));
+
+    if (Object.keys(d.candidates).length) {
+      box.append(el("h3", {}, "2 · Candidates per capability (chosen in bold)"));
+      const chosen = new Set(d.plan.map((s) => s.tool));
+      box.append(el("div", { class: "cands" }, Object.entries(d.candidates).map(([t, tools]) =>
+        el("div", { class: "cand" }, el("div", { class: "ty" }, t), tools.map((n) => el("div", { class: "tool" + (chosen.has(n) ? " chosen" : "") }, n))))));
+      const rej = Object.entries(d.rejected);
+      if (rej.length) box.append(el("div", { class: "note" }, "Rejected: ", rej.map(([n, why], i) => [i ? " · " : "", el("span", { class: "mono" }, n), " (" + why + ")"])));
+    }
+
+    if (d.plan.length) {
+      box.append(el("h3", {}, "3 · Plan"));
+      const steps = ex ? ex.steps : d.plan.map((s) => ({ ...s, purpose: "primary" }));
+      const planCols = levels(d.plan);
+      const extras = steps.filter((s) => s.purpose !== "primary");
+      const flow = el("div", { class: "flow" });
+      planCols.forEach((col, i) => {
+        if (i) flow.append(el("div", { class: "arrow", "aria-hidden": "true" }, "→"));
+        flow.append(el("div", { class: "lvl" }, col.map((s) => el("div", { class: "node primary" }, el("div", { class: "t" }, s.tool), el("div", { class: "s" }, "supplies " + s.supplies.join(", "))))));
+      });
+      if (extras.length) {
+        flow.append(el("div", { class: "arrow", "aria-hidden": "true" }, "⇢"));
+        flow.append(el("div", { class: "lvl" }, extras.map((s) => el("div", { class: "node " + s.purpose }, el("div", { class: "t" }, s.tool), el("div", { class: "s" }, s.purpose + " · " + s.supplies.join(", "))))));
+      }
+      box.append(flow);
+      box.append(el("h3", {}, "4 · Predicted before running"));
+      const e = d.estimates;
+      box.append(el("div", { class: "tiles" },
+        el("div", { class: "tile" }, el("div", { class: "v" }, fmt.usd(e.cost_usd)), el("div", { class: "l" }, "expected cost (simulated price)")),
+        el("div", { class: "tile" }, el("div", { class: "v" }, fmt.pct(e.success)), el("div", { class: "l" }, "P(correct answer)")),
+        el("div", { class: "tile" }, el("div", { class: "v" }, fmt.pct(e.p_latency_over_budget)), el("div", { class: "l" }, "P(latency over budget)")),
+        el("div", { class: "tile" }, el("div", { class: "v" }, fmt.ms(d.planning_ms)), el("div", { class: "l" }, "routing time")),
+      ));
+    }
+    if (d.notes.length) box.append(el("div", { class: "note" }, d.notes.join(" · ")));
+
+    if (ex) renderExecution(box, d, ex);
+  }
+
+  function renderExecution(box, d, ex) {
+    box.append(el("h3", {}, "5 · Execution (real tool calls)"));
+    box.append(el("div", { class: "tiles" },
+      el("div", { class: "tile" }, el("div", { class: "v" }, fmt.ms(ex.latency_ms)), el("div", { class: "l" }, "end-to-end latency")),
+      el("div", { class: "tile" }, el("div", { class: "v" }, fmt.usd(ex.cost_usd)), el("div", { class: "l" }, "actual cost (simulated price)")),
+      el("div", { class: "tile" }, el("div", { class: "v" }, String(ex.calls.length)), el("div", { class: "l" }, "tool calls")),
+    ));
+    const max = Math.max(1, ...ex.calls.map((c) => c.duration_ms));
+    const tl = el("div", { class: "timeline" });
+    ex.calls.forEach((c) => tl.append(el("div", { class: "tl" },
+      el("span", { class: "mono" }, c.tool + (c.attempt ? " (retry " + c.attempt + ")" : "")),
+      el("div", { class: "track", title: c.error || "" }, el("i", { class: c.ok ? "" : "f", style: `width:${(c.duration_ms / max) * 100}%` })),
+      el("span", { class: "badge " + (c.ok ? "ok" : "bad") }, c.ok ? fmt.ms(c.duration_ms) : (c.failure || "failed")))));
+    box.append(tl);
+
+    box.append(el("h3", {}, "6 · Evidence returned"));
+    const ev = Object.entries(ex.evidence);
+    if (!ev.length) box.append(el("div", { class: "note" }, "No evidence: the query needs no tools, or every call failed."));
+    ev.forEach(([type, x]) => {
+      const out = x.output;
+      const det = el("details", {}, el("summary", {}, type + " ← ", el("span", { class: "mono" }, x.tool), "  · confidence " + fmt.p(x.confidence)));
+      if (out && Array.isArray(out.hits)) out.hits.forEach((h) => det.append(el("div", { class: "hit" }, h.source ? el("div", { class: "src" }, h.source) : null, h.text)));
+      else if (out && Array.isArray(out.rows)) {
+        const cols = out.columns || Object.keys(out.rows[0] || {});
+        det.append(el("table", {}, el("thead", {}, el("tr", {}, cols.map((c) => el("th", {}, c)))),
+          el("tbody", {}, out.rows.slice(0, 20).map((r) => el("tr", {}, cols.map((c) => el("td", {}, String(r[c]))))))));
+      } else det.append(el("pre", {}, JSON.stringify(out, null, 2)));
+      box.append(det);
+    });
+
+    if (d.plan.length) {
+      box.append(el("h3", {}, "7 · Was the answer right? (teaches ATLAS)"));
+      const fb = el("div", { class: "actions", style: "margin-top:0" });
+      const send = async (ok) => {
+        fb.querySelectorAll("button").forEach((b) => (b.disabled = true));
+        try { await api("/v1/feedback", { request_id: d.request_id, success: ok }); fb.append(el("span", { class: "status" }, "Thanks — quality estimates updated.")); loadStats(); }
+        catch (e) { fb.append(el("span", { class: "status err" }, e.message)); }
+      };
+      fb.append(el("button", { onclick: () => send(true) }, "✓ Correct"), el("button", { onclick: () => send(false) }, "✗ Wrong"));
+      box.append(fb);
+    }
+  }
+
+  async function loadStats() {
+    const box = $("stats");
+    try {
+      const s = await api("/v1/stats");
+      const rows = Object.entries(s.tools).sort((a, b) => a[0].localeCompare(b[0]));
+      const maxLat = Math.max(1, ...rows.map(([, t]) => t.latency_ms));
+      box.replaceChildren(
+        el("table", {},
+          el("thead", {}, el("tr", {}, el("th", {}, "Tool"), el("th", {}, "Reliability"), el("th", {}, "Quality"), el("th", {}, "Latency"))),
+          el("tbody", {}, rows.map(([n, t]) => {
+            const circ = s.circuits[n];
+            return el("tr", {},
+              el("td", {}, el("div", { class: "mono" }, toolName(n)), circ && circ !== "closed" ? el("span", { class: "badge bad" }, "circuit " + circ) : null),
+              el("td", {}, fmt.p(t.reliability), bar(t.reliability, t.reliability < 0.8 ? "rust" : "")),
+              el("td", {}, fmt.p(t.quality), bar(t.quality, t.quality < 0.8 ? "amber" : "")),
+              el("td", { class: "num" }, fmt.ms(t.latency_ms), bar(t.latency_ms / maxLat, "amber")));
+          }))),
+        el("div", { class: "note" }, s.decisions + " decisions learned from so far"));
+    } catch (e) {
+      box.replaceChildren(el("div", { class: "status err" }, e.message.includes("admin") ? "Stats need an admin API key." : e.message));
+    }
+  }
+
+  const history = [];
+  function addHistory(q, d, ex) {
+    history.unshift({ q, d, ex });
+    const ul = $("history");
+    ul.replaceChildren(...history.slice(0, 12).map((h) => el("li", { onclick: () => renderDecision(h.d, h.ex), title: "Show this decision again" },
+      el("span", { class: "badge " + (h.d.constraints_satisfied ? "ok" : h.d.plan.length ? "warn" : "neutral") }, h.d.plan.length ? h.d.plan.length + " tools" : "0 tools"),
+      " ", h.q.length > 60 ? h.q.slice(0, 57) + "…" : h.q)));
+  }
+
+  async function go(execute) {
+    const query = $("query").value.trim();
+    if (!query) return;
+    const body = { query, constraints: { min_quality: Number($("q").value), latency_budget_ms: Number($("lat").value), value_of_success: Number($("v").value) } };
+    $("run").disabled = $("plan").disabled = true;
+    $("status").className = "status";
+    $("status").textContent = execute ? "Planning and running tools…" : "Planning…";
+    try {
+      if (execute) { const r = await api("/v1/execute", body); renderDecision(r.decision, r.execution); addHistory(query, r.decision, r.execution); }
+      else { const d = await api("/v1/route", body); renderDecision(d, null); addHistory(query, d, null); }
+      $("status").textContent = "";
+      loadStats();
+    } catch (e) {
+      $("status").className = "status err";
+      $("status").textContent = e.message;
+    } finally {
+      $("run").disabled = $("plan").disabled = false;
+    }
+  }
+  $("run").onclick = () => go(true);
+  $("plan").onclick = () => go(false);
+  $("refresh").onclick = loadStats;
+  $("query").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) go(true); });
+  loadStats();
+  // Shareable demo links: /ui?q=...&run=1 (or run=plan)
+  const params = new URLSearchParams(location.search);
+  if (params.get("q")) $("query").value = params.get("q");
+  if (params.get("run")) go(params.get("run") !== "plan");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS Results Dashboard</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f4f4f2; --surface-1: #fcfcfb; --surface-2: #f0efec; --line: #e1e0dc; --grid: #e9e8e4;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #6f6e69;
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+    --neutral: #a3a29c; --neutral-2: #c9c8c2; --pos: #2a78d6; --neg: #eb6834;
+    --seq-0: #cde2fb; --seq-1: #104281;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #121211; --surface-1: #1a1a19; --surface-2: #232321; --line: #2f2f2c; --grid: #2a2a28;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+      --neutral: #6f6e69; --neutral-2: #4a4a46; --pos: #3987e5; --neg: #d95926;
+      --seq-0: #184f95; --seq-1: #cde2fb;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #121211; --surface-1: #1a1a19; --surface-2: #232321; --line: #2f2f2c; --grid: #2a2a28;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #9a998f;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --neutral: #6f6e69; --neutral-2: #4a4a46; --pos: #3987e5; --neg: #d95926;
+    --seq-0: #184f95; --seq-1: #cde2fb;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--text-primary); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Calibri, sans-serif; }
+  header { padding: 22px 24px 8px; max-width: 1280px; margin: 0 auto; display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  header h1 { margin: 0; font: 700 26px/1.2 Cambria, Georgia, serif; }
+  header p { margin: 4px 0 0; color: var(--text-secondary); max-width: 760px; }
+  header .spacer { flex: 1; }
+  button, select { font: inherit; color: inherit; background: var(--surface-1); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+  main { max-width: 1280px; margin: 0 auto; padding: 8px 24px 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); padding: 8px 16px 40px; } header { padding: 18px 16px 6px; } }
+  .card { background: var(--surface-1); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; min-width: 0; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h2 { margin: 0; font: 700 17px/1.3 Cambria, Georgia, serif; }
+  .card .sub { color: var(--text-secondary); font-size: 13px; margin: 4px 0 10px; }
+  .tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .tile .v { font: 700 34px/1.1 Cambria, Georgia, serif; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+  .tile .d { color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 4px 0 8px; font-size: 13px; color: var(--text-secondary); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; padding: 5px 12px; }
+  .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--text-primary); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--text-secondary); margin: 2px 0 6px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legend i.line { height: 3px; border-radius: 2px; vertical-align: 3px; }
+  .chart { position: relative; width: 100%; }
+  svg { display: block; width: 100%; overflow: visible; }
+  svg text { fill: var(--text-muted); font-size: 11.5px; font-family: inherit; }
+  svg text.lab { fill: var(--text-secondary); font-size: 12px; }
+  svg text.val { fill: var(--text-primary); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .tip { position: fixed; pointer-events: none; background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 16px rgba(0,0,0,.14); z-index: 10; display: none; max-width: 280px; }
+  .tip b { display: block; margin-bottom: 2px; }
+  .tip .r { display: flex; gap: 8px; justify-content: space-between; }
+  .tip .k { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+  .tip .k i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  details.tbl { margin-top: 10px; font-size: 13px; }
+  details.tbl summary { cursor: pointer; color: var(--text-secondary); }
+  details.tbl table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  details.tbl th, details.tbl td { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+  details.tbl th:first-child, details.tbl td:first-child { text-align: left; }
+  details.tbl th { color: var(--text-secondary); font-weight: 600; }
+  .note { color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+  footer { max-width: 1280px; margin: 0 auto; padding: 0 24px 40px; color: var(--text-muted); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ATLAS Results Dashboard</h1>
+    <p>Every experiment in one place: simulator (20 seeds), live tools (10 seeds), ablations, scaling and the understanding stage. Hover any mark for exact values; each chart has a table view. Cost is a simulated per-call price in milli-USD.</p>
+  </div>
+  <div class="spacer"></div>
+  <button id="theme" aria-label="Toggle light or dark theme">◐ Theme</button>
+</header>
+<main id="main"></main>
+<footer>Generated by <code>python -m benchmarks.experiments.dashboard</code> from the committed result files in <code>benchmarks/reports/</code>.</footer>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const DATA = {"meta":{"seeds":20},"comparison":{"E1":{"success":{"B0 Single tool":{"mean":0.35385,"lo":0.34922500000000006,"hi":0.3587},"B1 Rules":{"mean":0.48629999999999995,"lo":0.480075,"hi":0.49247500000000005},"B2 Supervised":{"mean":0.833325,"lo":0.830025,"hi":0.836975},"B3 Retrieval":{"mean":0.2961,"lo":0.292275,"hi":0.30047500000000005},"B4 Static":{"mean":0.86305,"lo":0.8558749999999999,"hi":0.8692256250000001},"B5 Bandit":{"mean":0.8381500000000001,"lo":0.834875,"hi":0.84155},"ATLAS":{"mean":0.907,"lo":0.9044000000000001,"hi":0.9094749999999999},"Oracle":{"mean":0.89435,"lo":0.891925,"hi":0.8967750000000001}},"cost_per_success_musd":{"B0 Single tool":{"mean":6.338528029890255,"lo":6.22208912486224,"hi":6.447700176503625},"B1 Rules":{"mean":6.118961018614112,"lo":6.017507494081525,"hi":6.223033128522748},"B2 Supervised":{"mean":3.9743871748435504,"lo":3.9180540758419444,"hi":4.02733842438755},"B3 Retrieval":{"mean":11.569149829005188,"lo":11.415365002093758,"hi":11.720824989318924},"B4 Static":{"mean":4.911217849203366,"lo":4.694672705065073,"hi":5.138006279012391},"B5 Bandit":{"mean":4.243538147835425,"lo":4.182148222197059,"hi":4.307504168375191},"ATLAS":{"mean":4.199550629996302,"lo":4.0972446100503905,"hi":4.300763948601198},"Oracle":{"mean":3.2806920354363873,"lo":3.236724355501232,"hi":3.324231236524423}},"calls_per_task":{"B0 Single tool":{"mean":0.728075,"lo":0.724374375,"hi":0.7315250000000001},"B1 Rules":{"mean":1.1614000000000002,"lo":1.1516,"hi":1.1708756250000003},"B2 Supervised":{"mean":1.5235500000000002,"lo":1.5152999999999999,"hi":1.5317},"B3 Retrieval":{"mean":1.8896500000000003,"lo":1.8855499999999998,"hi":1.8938500000000005},"B4 Static":{"mean":1.6392250000000002,"lo":1.6245249999999998,"hi":1.653425},"B5 Bandit":{"mean":1.5797500000000002,"lo":1.5716750000000002,"hi":1.5873256250000003},"ATLAS":{"mean":1.856025,"lo":1.8295737499999998,"hi":1.8830500000000001},"Oracle":{"mean":1.5015,"lo":1.49315,"hi":1.50975}},"unnecessary_per_task":{"B0 Single tool":{"mean":0.029199999999999997,"lo":0.0279,"hi":0.030424999999999997},"B1 Rules":{"mean":0.187225,"lo":0.1808,"hi":0.193950625},"B2 Supervised":{"mean":0.11539999999999999,"lo":0.1117,"hi":0.11947500000000003},"B3 Retrieval":{"mean":1.256725,"lo":1.2498250000000002,"hi":1.263425},"B4 Static":{"mean":0.116075,"lo":0.1135,"hi":0.11865},"B5 Bandit":{"mean":0.115425,"lo":0.11287499999999999,"hi":0.11795},"ATLAS":{"mean":0.34762499999999996,"lo":0.327225,"hi":0.368575},"Oracle":{"mean":0.0,"lo":0.0,"hi":0.0}},"latency_p95":{"B0 Single tool":{"mean":406.9640005073492,"lo":402.1629739406995,"hi":411.5814931282791},"B1 Rules":{"mean":653.4887317371101,"lo":646.9919849302127,"hi":660.4796508625609},"B2 Supervised":{"mean":677.1758673650927,"lo":673.6173791054107,"hi":680.8656307586328},"B3 Retrieval":{"mean":588.2195363267605,"lo":581.9177677102945,"hi":594.2609141018702},"B4 Static":{"mean":783.7406790874026,"lo":772.5076348655649,"hi":795.0014534696069},"B5 Bandit":{"mean":754.4721607887429,"lo":745.7122318327031,"hi":763.4762604664694},"ATLAS":{"mean":921.7767159492636,"lo":902.4516718117724,"hi":940.3290416056049},"Oracle":{"mean":654.6083793219044,"lo":649.7469356334126,"hi":659.278618769944}}},"E2":{"success":{"B0 Single tool":{"mean":0.3477,"lo":0.3434995833333333,"hi":0.3521504166666667},"B1 Rules":{"mean":0.4750166666666667,"lo":0.4708162499999999,"hi":0.47916666666666663},"B2 Supervised":{"mean":0.7243833333333332,"lo":0.7198995833333333,"hi":0.729},"B3 Retrieval":{"mean":0.29313333333333336,"lo":0.28933333333333333,"hi":0.2970833333333333},"B4 Static":{"mean":0.8195833333333333,"lo":0.8093158333333333,"hi":0.8287337499999999},"B5 Bandit":{"mean":0.8025166666666668,"lo":0.7988000000000001,"hi":0.8058333333333334},"ATLAS":{"mean":0.8891499999999999,"lo":0.8877,"hi":0.8905999999999998},"Oracle":{"mean":0.8911833333333334,"lo":0.8889000000000001,"hi":0.8933499999999999}},"cost_per_success_musd":{"B0 Single tool":{"mean":6.413347768252381,"lo":6.307012291075661,"hi":6.514370684476574},"B1 Rules":{"mean":6.261642642346262,"lo":6.175754732867526,"hi":6.3485573316189665},"B2 Supervised":{"mean":4.538922363147295,"lo":4.4759873036382976,"hi":4.598467033950465},"B3 Retrieval":{"mean":11.685360259917779,"lo":11.526575012869552,"hi":11.847544827694248},"B4 Static":{"mean":4.9860084794062605,"lo":4.794613763646272,"hi":5.182761230001495},"B5 Bandit":{"mean":4.544196146639578,"lo":4.481637547270835,"hi":4.61052457967524},"ATLAS":{"mean":4.589416289904528,"lo":4.503093466194664,"hi":4.668603728328479},"Oracle":{"mean":3.7076893530216295,"lo":3.672890813135033,"hi":3.7409553503413977}},"calls_per_task":{"B0 Single tool":{"mean":0.7166833333333333,"lo":0.7127333333333332,"hi":0.7205666666666667},"B1 Rules":{"mean":1.1573833333333332,"lo":1.1484,"hi":1.1669004166666668},"B2 Supervised":{"mean":1.4957333333333334,"lo":1.4884666666666666,"hi":1.5028166666666665},"B3 Retrieval":{"mean":1.8904666666666663,"lo":1.8859500000000005,"hi":1.8950666666666662},"B4 Static":{"mean":1.6017666666666668,"lo":1.5893666666666666,"hi":1.6138837499999998},"B5 Bandit":{"mean":1.5683666666666667,"lo":1.5610000000000002,"hi":1.5753},"ATLAS":{"mean":1.8756666666666668,"lo":1.8549987499999998,"hi":1.8956170833333335},"Oracle":{"mean":1.49825,"lo":1.4912666666666667,"hi":1.5048337500000002}},"unnecessary_per_task":{"B0 Single tool":{"mean":0.028250000000000004,"lo":0.02718333333333333,"hi":0.029383333333333327},"B1 Rules":{"mean":0.19186666666666669,"lo":0.18673291666666664,"hi":0.19696708333333335},"B2 Supervised":{"mean":0.11305000000000001,"lo":0.11003333333333334,"hi":0.11648333333333334},"B3 Retrieval":{"mean":1.2512166666666664,"lo":1.2456833333333335,"hi":1.2564833333333332},"B4 Static":{"mean":0.11521666666666668,"lo":0.11249999999999998,"hi":0.11808375},"B5 Bandit":{"mean":0.11485000000000001,"lo":0.11216666666666668,"hi":0.11766666666666667},"ATLAS":{"mean":0.3705166666666667,"lo":0.35434958333333333,"hi":0.3861516666666667},"Oracle":{"mean":0.0,"lo":0.0,"hi":0.0}},"latency_p95":{"B0 Single tool":{"mean":382.22504156083943,"lo":378.0159697656167,"hi":386.44718457070576},"B1 Rules":{"mean":961.7657767399802,"lo":938.0849865834737,"hi":985.1660103061879},"B2 Supervised":{"mean":1480.3257324242663,"lo":1460.6819528691315,"hi":1500.6293719150601},"B3 Retrieval":{"mean":628.657440543219,"lo":623.5174655355022,"hi":633.9011639391325},"B4 Static":{"mean":1439.1256202897093,"lo":1397.9959679415,"hi":1476.9425384760495},"B5 Bandit":{"mean":1252.35875277953,"lo":1229.6012977750468,"hi":1274.1713619240481},"ATLAS":{"mean":1357.4699781015327,"lo":1340.240577838275,"hi":1373.4576655405328},"Oracle":{"mean":1104.2164908176692,"lo":1083.9450927002983,"hi":1122.6217327810064}}}},"curves":{"ATLAS":[0.9125,0.912,0.9135,0.911,0.913,0.9115,0.9115,0.914,0.9185,0.9235,0.92,0.9155,0.9105,0.9075,0.915,0.9145,0.911,0.909,0.9075,0.909,0.911,0.9075,0.9105,0.9075,0.9045,0.9075,0.902,0.9045,0.9055,0.907,0.9075,0.9055,0.912,0.914,0.9105,0.9105,0.9055,0.891,0.874,0.862,0.8525,0.8595,0.8675,0.873,0.8715,0.8725,0.875,0.874,0.8815,0.885,0.8915,0.895,0.897,0.8925,0.8915,0.8885,0.886,0.887,0.88,0.884,0.887,0.8925,0.902,0.905,0.9025,0.8995,0.899,0.902,0.9025,0.882,0.8655,0.8335,0.815,0.8135,0.817,0.829,0.8325,0.8335,0.831,0.8285,0.8265,0.832,0.843,0.861,0.8825,0.8945,0.8955,0.897,0.9005,0.91,0.91,0.907,0.902,0.9,0.8975,0.897,0.893,0.893,0.8945,0.8905,0.89,0.879,0.876,0.883,0.884,0.8885,0.888,0.8845,0.8855,0.888,0.891,0.8885,0.8865,0.8805,0.884,0.889,0.892],"B2 Supervised":[0.8235,0.84,0.835,0.839,0.8415,0.835,0.836,0.8435,0.8455,0.851,0.845,0.838,0.8305,0.8305,0.8275,0.826,0.83,0.822,0.8345,0.8325,0.8245,0.8245,0.8245,0.826,0.8295,0.835,0.8295,0.835,0.8415,0.838,0.8405,0.837,0.831,0.8315,0.828,0.824,0.825,0.7925,0.754,0.7185,0.6735,0.6795,0.6765,0.6745,0.678,0.6635,0.667,0.6725,0.681,0.684,0.6895,0.6905,0.695,0.69,0.684,0.6795,0.68,0.6885,0.6955,0.693,0.691,0.6835,0.6805,0.6775,0.677,0.679,0.675,0.689,0.6855,0.6435,0.5925,0.5335,0.4805,0.4865,0.5015,0.515,0.519,0.522,0.5255,0.5185,0.525,0.541,0.585,0.624,0.678,0.7055,0.7015,0.7165,0.716,0.724,0.723,0.723,0.717,0.7125,0.712,0.715,0.715,0.7135,0.7125,0.6955,0.6955,0.698,0.702,0.7205,0.7305,0.7235,0.724,0.7265,0.7235,0.732,0.733,0.7235,0.7195,0.7165,0.724,0.7235,0.7285],"B4 Static":[0.8435,0.8495,0.8515,0.8495,0.8545,0.855,0.8525,0.8605,0.8675,0.8655,0.8625,0.8555,0.845,0.8495,0.8545,0.855,0.854,0.8475,0.8505,0.846,0.853,0.8565,0.86,0.867,0.8655,0.865,0.865,0.8675,0.87,0.8695,0.8685,0.8695,0.8685,0.873,0.8655,0.8665,0.8655,0.856,0.85,0.8415,0.826,0.8285,0.8365,0.8315,0.838,0.838,0.835,0.8345,0.8375,0.8395,0.838,0.845,0.845,0.8405,0.844,0.8385,0.844,0.844,0.8485,0.854,0.8585,0.8605,0.8525,0.852,0.846,0.8455,0.8495,0.8595,0.85,0.787,0.7225,0.6455,0.59,0.597,0.6105,0.624,0.628,0.6275,0.62,0.6115,0.61,0.629,0.6855,0.7485,0.8125,0.848,0.8505,0.8515,0.849,0.851,0.842,0.8395,0.837,0.8415,0.843,0.842,0.8385,0.8355,0.84,0.831,0.831,0.828,0.821,0.8305,0.8345,0.822,0.813,0.808,0.799,0.8095,0.8215,0.8175,0.8165,0.8075,0.806,0.8055,0.8095],"B5 Bandit":[0.823,0.8345,0.831,0.833,0.8345,0.8325,0.8345,0.837,0.8435,0.849,0.8495,0.85,0.836,0.834,0.837,0.8355,0.838,0.833,0.841,0.839,0.8435,0.8435,0.8475,0.848,0.842,0.842,0.837,0.839,0.845,0.846,0.8475,0.8465,0.84,0.843,0.838,0.8385,0.8435,0.826,0.8025,0.784,0.7745,0.78,0.787,0.793,0.7865,0.7815,0.788,0.7875,0.7925,0.7995,0.805,0.8045,0.805,0.7965,0.7945,0.7945,0.7995,0.804,0.8075,0.809,0.815,0.827,0.8225,0.8285,0.825,0.82,0.823,0.825,0.8225,0.7725,0.722,0.6805,0.6405,0.6505,0.6715,0.68,0.6925,0.7005,0.7035,0.703,0.705,0.7115,0.725,0.742,0.77,0.7875,0.7925,0.8025,0.8005,0.8045,0.8025,0.8015,0.7975,0.7995,0.796,0.8015,0.8095,0.807,0.812,0.803,0.797,0.7935,0.794,0.7995,0.8015,0.8085,0.81,0.812,0.8145,0.813,0.8155,0.8175,0.811,0.8125,0.816,0.8195,0.8265],"Oracle":[0.8855,0.8945,0.892,0.89,0.8925,0.893,0.891,0.898,0.9015,0.9035,0.8975,0.8925,0.887,0.886,0.891,0.892,0.896,0.893,0.8985,0.899,0.8915,0.8915,0.8915,0.8905,0.897,0.899,0.896,0.903,0.9025,0.898,0.898,0.891,0.8885,0.893,0.8915,0.893,0.896,0.894,0.895,0.892,0.8855,0.889,0.891,0.894,0.904,0.9015,0.9015,0.897,0.893,0.8945,0.8955,0.9015,0.9005,0.8985,0.8925,0.8895,0.894,0.898,0.9065,0.9085,0.915,0.9135,0.9055,0.908,0.9005,0.8975,0.8995,0.9015,0.904,0.887,0.8715,0.8435,0.8215,0.8235,0.8265,0.837,0.844,0.8445,0.848,0.844,0.8375,0.8465,0.8605,0.872,0.893,0.8975,0.896,0.902,0.9015,0.9045,0.901,0.9055,0.9035,0.904,0.9055,0.903,0.9045,0.909,0.911,0.903,0.9035,0.899,0.8975,0.9105,0.9105,0.9055,0.8985,0.894,0.8895,0.894,0.8955,0.8905,0.8905,0.888,0.8985,0.898,0.9015]},"drifts":[{"t":1000,"label":"search_b overloaded, sql_replica lag"},{"t":1800,"label":"vector_docs outage"},{"t":2000,"label":"search_b recovers, sandbox slows"},{"t":2200,"label":"search_a upgraded"}],"tradeoff":{"atlas":[{"q":0.6,"success":0.8501000000000001,"cost":3.751519875220553},{"q":0.7,"success":0.8648666666666667,"cost":4.047199196415118},{"q":0.8,"success":0.8897666666666668,"cost":4.642262775633374},{"q":0.9,"success":0.9027666666666667,"cost":5.280644682312178}],"baselines":[{"name":"B2 Supervised","success":0.7243833333333332,"cost":4.538922363147295},{"name":"B4 Static","success":0.8195833333333333,"cost":4.9860084794062605},{"name":"B5 Bandit","success":0.8025166666666668,"cost":4.544196146639578}]},"ablations":[{"name":"plan graph (A4)","delta":{"mean":0.27875000000000005,"lo":0.2751329166666667,"hi":0.28236708333333344},"cost_saved":1.8239590906774836},{"name":"VoI stopping (A5)","delta":{"mean":0.07320000000000003,"lo":0.07143333333333338,"hi":0.07498375000000003},"cost_saved":-0.3171489535672035},{"name":"imputation (A10)","delta":{"mean":0.015450000000000014,"lo":0.01359958333333333,"hi":0.01735000000000001},"cost_saved":-0.3831584691661495},{"name":"feasibility (A7)","delta":{"mean":0.014366666666666684,"lo":0.011549583333333334,"hi":0.01706708333333335},"cost_saved":-0.09240029056928596},{"name":"fallback (A8)","delta":{"mean":0.00480000000000001,"lo":0.004016666666666668,"hi":0.0056170833333333515},"cost_saved":0.012753206120213977},{"name":"reliability (A2)","delta":{"mean":0.0006500000000000172,"lo":-0.0007833333333333248,"hi":0.0020833333333333424},"cost_saved":-0.04905831067430193},{"name":"latency (A6)","delta":{"mean":0.00018333333333332978,"lo":-0.0011500000000000067,"hi":0.001583333333333337},"cost_saved":0.09009532916071157},{"name":"exploration (A9)","delta":{"mean":-0.00714999999999999,"lo":-0.00926666666666665,"hi":-0.005133333333333334},"cost_saved":0.17208615087614532},{"name":"context (A1)","delta":{"mean":-0.01004999999999998,"lo":-0.011566666666666642,"hi":-0.008549999999999985},"cost_saved":0.6357160533082759},{"name":"cost (A3)","delta":{"mean":-0.011516666666666642,"lo":-0.013033333333333303,"hi":-0.010049999999999976},"cost_saved":0.7739506423559576}],"scaling":{"ATLAS":[{"tools":12,"success":0.907,"p95":6.049719002185154},{"tools":37,"success":0.9016666666666666,"p95":9.020247997104885},{"tools":112,"success":0.8586666666666666,"p95":9.74363500106847},{"tools":262,"success":0.8146666666666667,"p95":11.26575299989781},{"tools":512,"success":0.79,"p95":15.503298994153734}],"B5 Bandit":[{"tools":12,"success":0.8233333333333335,"p95":4.933137999760218},{"tools":37,"success":0.736,"p95":5.095894999103619},{"tools":112,"success":0.5596666666666665,"p95":4.737875002319923},{"tools":262,"success":0.523,"p95":5.120018001907735},{"tools":512,"success":0.493,"p95":10.29174599578254}],"B3 Retrieval":[{"tools":12,"success":0.29566666666666663,"p95":0.6416680007532699},{"tools":37,"success":0.24633333333333335,"p95":0.8140889971400604},{"tools":112,"success":0.19833333333333336,"p95":1.4370089974545401},{"tools":262,"success":0.191,"p95":2.1472390022245227},{"tools":512,"success":0.18833333333333332,"p95":8.419452996749886}]},"live":{"seeds":10,"routers":{"ATLAS":{"success":{"mean":0.9020000000000001,"lo":0.8887500000000002,"hi":0.9157500000000001},"incident":{"mean":0.8092857142857144,"lo":0.7721428571428571,"hi":0.8478571428571428},"cost":3.3269311580216128,"family":[0.8682297327756604,0.7942481655629133,0.8961165245015437,0.9592841978283155,0.996460497861893]},"ATLAS v1":{"success":{"mean":0.9005000000000001,"lo":0.8877499999999999,"hi":0.9140062500000001},"incident":{"mean":0.8057142857142857,"lo":0.7699999999999999,"hi":0.8421428571428571},"cost":3.309281033894888,"family":[0.8671061372700425,0.7955302168449646,0.8976706628514567,0.9592841978283155,0.9880244866104093]},"B4 Static cost-aware":{"success":{"mean":0.78575,"lo":0.7517437499999999,"hi":0.8195},"incident":{"mean":0.5142857142857143,"lo":0.43641071428571426,"hi":0.5914285714285714},"cost":3.4578376118995413,"family":[0.7014710686627226,0.6409929579184935,0.7370809634958541,0.9581077272400803,0.9134686112872543]},"B5 Contextual bandit":{"success":{"mean":0.51625,"lo":0.5010000000000001,"hi":0.534},"incident":{"mean":0.4557142857142857,"lo":0.4357142857142858,"hi":0.4735714285714286},"cost":2.577212224742359,"family":[0.6494823760868442,0.0,0.0,0.9542965384288914,0.9842819579138539]},"Rules (best tools)":{"success":{"mean":0.81125,"lo":0.784,"hi":0.8404999999999999},"incident":{"mean":0.5142857142857143,"lo":0.44214285714285717,"hi":0.5907142857142857},"cost":3.0797243604851476,"family":[0.6968199058720249,0.6989066238347088,0.7184155300920485,0.9581077272400803,1.0]},"Rules (cheapest tools)":{"success":{"mean":0.4835000000000001,"lo":0.47275,"hi":0.49399999999999994},"incident":{"mean":0.4692857142857143,"lo":0.44571428571428573,"hi":0.4928571428571429},"cost":1.138426798340283,"family":[0.6816703290001338,0.6914815875522689,0.0,0.5187593150883164,0.538587363464196]}},"families":["kpi_lookup","growth","stats","policy","incident"]},"understanding":{"levels":["Oracle","Classifier","20% corrupted","40% corrupted","Local LLM 0.5B"],"accuracy":[1.0,0.898,0.848,0.597,0.352],"routers":{"ATLAS":[0.9225,0.9015000000000001,0.8065,0.6615,0.49000000000000005],"B4 Static":[0.8634999999999999,0.8314999999999999,0.7475,0.6095,0.442],"B5 Bandit":[0.849,0.819,0.7295,0.5854999999999999,0.4425]}},"metrics":{"success":"Task success","cost_per_success_musd":"Cost per success (m$)","calls_per_task":"Tool calls per task","unnecessary_per_task":"Unnecessary calls per task","latency_p95":"Latency p95 (ms)"}};
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  const t = store.get("atlas-dash-theme"); if (t) document.documentElement.dataset.theme = t;
+  document.getElementById("theme").onclick = () => {
+    const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next; store.set("atlas-dash-theme", next); renderAll();
+  };
+
+  function h(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) k === "class" ? (n.className = v) : k.startsWith("on") ? n.addEventListener(k.slice(2), v) : n.setAttribute(k, v);
+    for (const c of kids.flat()) if (c != null) n.append(c instanceof Node ? c : document.createTextNode(String(c)));
+    return n;
+  }
+  function s(tag, attrs = {}, text) {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  const f3 = (x) => x.toFixed(3), f2 = (x) => x.toFixed(2), f0 = (x) => Math.round(x).toLocaleString();
+
+  // ---------- tooltip
+  const tip = document.getElementById("tip");
+  function showTip(ev, title, rows) {
+    tip.replaceChildren(h("b", {}, title), ...rows.map(([k, v, color]) => h("div", { class: "r" }, h("span", { class: "k" }, color ? h("i", { style: `background:${color}` }) : null, k), h("span", {}, v))));
+    tip.style.display = "block";
+    const w = tip.offsetWidth, hgt = tip.offsetHeight;
+    let x = ev.clientX + 14, y = ev.clientY + 14;
+    if (x + w > innerWidth - 8) x = ev.clientX - w - 14;
+    if (y + hgt > innerHeight - 8) y = ev.clientY - hgt - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  }
+  const hideTip = () => (tip.style.display = "none");
+
+  function table(head, rows) {
+    return h("details", { class: "tbl" }, h("summary", {}, "Show table"),
+      h("table", {}, h("thead", {}, h("tr", {}, head.map((x) => h("th", {}, x)))), h("tbody", {}, rows.map((r) => h("tr", {}, r.map((x) => h("td", {}, x)))))));
+  }
+  function legend(items) {
+    return h("div", { class: "legend" }, items.map(([name, color, line, dash]) => h("span", {}, h("i", { class: line ? "line" : "", style: `background:${color};${dash ? "background:repeating-linear-gradient(90deg," + color + " 0 4px,transparent 4px 7px)" : ""}` }), name)));
+  }
+  function card(title, sub, wide) {
+    const c = h("section", { class: "card" + (wide ? " wide" : "") }, h("h2", {}, title), sub ? h("div", { class: "sub" }, sub) : null);
+    document.getElementById("main").append(c);
+    return c;
+  }
+  function svgBox(container, height) {
+    const width = Math.max(280, container.clientWidth || 600);
+    const svg = s("svg", { viewBox: `0 0 ${width} ${height}`, height, role: "img" });
+    return { svg, width, height };
+  }
+  function ticks(lo, hi, n = 5) {
+    const step = Math.pow(10, Math.floor(Math.log10((hi - lo) / n)));
+    const err = (hi - lo) / n / step, mult = err >= 7.5 ? 10 : err >= 3.5 ? 5 : err >= 1.5 ? 2 : 1, st = step * mult;
+    const out = []; for (let v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) out.push(+v.toFixed(10)); return out;
+  }
+
+  // ---------- horizontal bars (supports negatives and CI whiskers)
+  function barsH(el, rows, { fmt = f3, domain, label = "value", height } = {}) {
+    const rowH = 30, top = 6, H = height || top + rows.length * rowH + 26;
+    const { svg, width } = svgBox(el, H);
+    const left = Math.min(150, width * 0.32), right = 54;
+    const lo = domain ? domain[0] : Math.min(0, ...rows.map((r) => r.lo ?? r.value));
+    const hi = domain ? domain[1] : Math.max(...rows.map((r) => r.hi ?? r.value)) * 1.04;
+    const X = (v) => left + ((v - lo) / (hi - lo)) * (width - left - right);
+    for (const tv of ticks(lo, hi)) {
+      svg.append(s("line", { x1: X(tv), x2: X(tv), y1: top, y2: H - 22, stroke: css("--grid"), "stroke-width": 1 }));
+      svg.append(s("text", { x: X(tv), y: H - 6, "text-anchor": "middle" }, fmt === f0 ? f0(tv) : +tv.toFixed(3)));
+    }
+    rows.forEach((r, i) => {
+      const y = top + i * rowH, bh = 18, x0 = X(Math.max(lo, 0)), x1 = X(r.value);
+      svg.append(s("text", { class: "lab", x: left - 8, y: y + bh / 2 + 4, "text-anchor": "end" }, r.label));
+      const bx = Math.min(x0, x1), bw = Math.max(1, Math.abs(x1 - x0));
+      const rad = Math.min(4, bw / 2);
+      // rounded only at the data end
+      const d = r.value >= 0
+        ? `M${bx},${y} h${bw - rad} a${rad},${rad} 0 0 1 ${rad},${rad} v${bh - 2 * rad} a${rad},${rad} 0 0 1 -${rad},${rad} h-${bw - rad} z`
+        : `M${bx + bw},${y} h-${bw - rad} a${rad},${rad} 0 0 0 -${rad},${rad} v${bh - 2 * rad} a${rad},${rad} 0 0 0 ${rad},${rad} h${bw - rad} z`;
+      svg.append(s("path", { d, fill: r.color }));
+      if (r.lo != null) {
+        svg.append(s("line", { x1: X(r.lo), x2: X(r.hi), y1: y + bh / 2, y2: y + bh / 2, stroke: css("--text-secondary"), "stroke-width": 1.5 }));
+        for (const v of [r.lo, r.hi]) svg.append(s("line", { x1: X(v), x2: X(v), y1: y + 5, y2: y + bh - 5, stroke: css("--text-secondary"), "stroke-width": 1.5 }));
+      }
+      // Labels always sit right of the bar end (or of zero, for negative bars) so they never reach the category names.
+      const end = (r.value >= 0 ? Math.max(x1, r.hi != null ? X(r.hi) : x1) : Math.max(x0, r.hi != null ? X(r.hi) : x0)) + 6;
+      if (r.showValue !== false) svg.append(s("text", { class: "val", x: end, y: y + bh / 2 + 4, "text-anchor": "start" }, fmt(r.value)));
+      const hit = s("rect", { x: left, y: y - 4, width: width - left, height: rowH, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, r.label, [[label, fmt(r.value), r.color], ...(r.lo != null ? [["95% CI", `${fmt(r.lo)} – ${fmt(r.hi)}`]] : []), ...(r.extra || [])]));
+      hit.addEventListener("mouseleave", hideTip);
+      svg.append(hit);
+    });
+    el.append(svg);
+  }
+
+  // ---------- line chart with crosshair
+  function lines(el, series, { xs, xfmt = (x) => x, yfmt = f3, ydomain, height = 300, vlines = [], xLabel, ylog = false, xcats } = {}) {
+    const { svg, width } = svgBox(el, height);
+    const left = 44, right = 92, top = 10, bottom = 34;
+    const allY = series.flatMap((sr) => sr.values);
+    const lo = ydomain ? ydomain[0] : Math.min(...allY), hi = ydomain ? ydomain[1] : Math.max(...allY);
+    const xmin = xcats ? 0 : Math.min(...xs), xmax = xcats ? xs.length - 1 : Math.max(...xs);
+    const xp = (i) => (xcats ? i : xs[i]);
+    const X = (v) => left + ((ylog ? Math.log(v) - Math.log(xmin) : v - xmin) / (ylog ? Math.log(xmax) - Math.log(xmin) : xmax - xmin)) * (width - left - right);
+    const Y = (v) => top + (1 - (v - lo) / (hi - lo)) * (height - top - bottom);
+    for (const tv of ticks(lo, hi, 4)) {
+      svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }));
+      svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, yfmt === f0 ? f0(tv) : +tv.toFixed(3)));
+    }
+    const xt = xcats ? xs.map((_, i) => i) : ylog ? xs : ticks(xmin, xmax, 6);
+    xt.forEach((tv) => svg.append(s("text", { x: X(tv), y: height - bottom + 16, "text-anchor": "middle" }, xcats ? xs[tv] : xfmt(tv))));
+    if (xLabel) svg.append(s("text", { x: left + (width - left - right) / 2, y: height - 2, "text-anchor": "middle" }, xLabel));
+    vlines.forEach((v, i) => {
+      svg.append(s("line", { x1: X(v.x), x2: X(v.x), y1: top, y2: height - bottom, stroke: css("--text-muted"), "stroke-dasharray": "3 4", "stroke-width": 1 }));
+      svg.append(s("text", { x: X(v.x) + 4, y: top + 12 + (i % 2) * 14 }, `${i + 1}`));
+    });
+    series.forEach((sr) => {
+      const d = sr.values.map((v, i) => `${i ? "L" : "M"}${X(xp(i)).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+      svg.append(s("path", { d, fill: "none", stroke: sr.color, "stroke-width": sr.emph ? 2.5 : 2, "stroke-dasharray": sr.dash ? "5 4" : "none", "stroke-linejoin": "round" }));
+      if (sr.markers) sr.values.forEach((v, i) => svg.append(s("circle", { cx: X(xp(i)), cy: Y(v), r: 4.5, fill: sr.color, stroke: css("--surface-1"), "stroke-width": 2 })));
+    });
+    // direct end labels, nudged apart
+    const ends = series.map((sr) => ({ name: sr.name, y: Y(sr.values[sr.values.length - 1]), color: sr.color })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    ends.forEach((e) => svg.append(s("text", { class: "lab", x: width - right + 6, y: e.y + 4 }, e.name)));
+    const cross = s("line", { y1: top, y2: height - bottom, stroke: css("--text-secondary"), "stroke-width": 1, visibility: "hidden" });
+    svg.append(cross);
+    const hit = s("rect", { x: left, y: top, width: width - left - right, height: height - top - bottom, fill: "transparent" });
+    hit.addEventListener("mousemove", (ev) => {
+      const rect = svg.getBoundingClientRect(), px = ((ev.clientX - rect.left) / rect.width) * width;
+      let best = 0, bd = Infinity;
+      xs.forEach((_, i) => { const d = Math.abs(X(xp(i)) - px); if (d < bd) { bd = d; best = i; } });
+      cross.setAttribute("x1", X(xp(best))); cross.setAttribute("x2", X(xp(best))); cross.setAttribute("visibility", "visible");
+      showTip(ev, xcats ? xs[best] : xfmt(xs[best]), series.map((sr) => [sr.name, yfmt(sr.values[best]), sr.color]));
+    });
+    hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
+    svg.append(hit);
+    el.append(svg);
+  }
+
+  // ---------- grouped vertical bars
+  function grouped(el, cats, series, { yfmt = f2, ydomain = [0, 1], height = 300 } = {}) {
+    const { svg, width } = svgBox(el, height);
+    const left = 40, right = 8, top = 10, bottom = 44;
+    const Y = (v) => top + (1 - (v - ydomain[0]) / (ydomain[1] - ydomain[0])) * (height - top - bottom);
+    for (const tv of ticks(ydomain[0], ydomain[1], 5)) {
+      svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") }));
+      svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, +tv.toFixed(2)));
+    }
+    const gw = (width - left - right) / cats.length, pad = gw * 0.18, bw = (gw - 2 * pad - (series.length - 1) * 2) / series.length;
+    cats.forEach((c, ci) => {
+      const gx = left + ci * gw;
+      const words = c.split(" "), mid = Math.ceil(words.length / 2);
+      const lines2 = c.length > 14 && words.length > 1 ? [words.slice(0, mid).join(" "), words.slice(mid).join(" ")] : [c];
+      lines2.forEach((ln, li) => svg.append(s("text", { class: "lab", x: gx + gw / 2, y: height - bottom + 16 + li * 14, "text-anchor": "middle" }, ln)));
+      series.forEach((sr, si) => {
+        const v = sr.values[ci], x = gx + pad + si * (bw + 2), y = Y(v), hgt = Y(ydomain[0]) - y, rad = Math.min(4, bw / 2, hgt);
+        svg.append(s("path", { d: `M${x},${Y(ydomain[0])} v-${hgt - rad} a${rad},${rad} 0 0 1 ${rad},-${rad} h${bw - 2 * rad} a${rad},${rad} 0 0 1 ${rad},${rad} v${hgt - rad} z`, fill: sr.color }));
+      });
+      const hit = s("rect", { x: gx, y: top, width: gw, height: height - top - bottom, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, c, series.map((sr) => [sr.name, yfmt(sr.values[ci]), sr.color])));
+      hit.addEventListener("mouseleave", hideTip);
+      svg.append(hit);
+    });
+    el.append(svg);
+  }
+
+  // ---------- heatmap (sequential, one hue)
+  function heatmap(el, rows, cols, values) {
+    const cellH = 34, top = 4, left = 150, H = top + rows.length * cellH + 30;
+    const { svg, width } = svgBox(el, H);
+    const cw = (width - left) / cols.length;
+    const lo = css("--seq-0"), hi = css("--seq-1");
+    const mix = (a, b, t) => { const p = (x) => [1, 3, 5].map((i) => parseInt(x.slice(i, i + 2), 16)); const A = p(a), B = p(b); return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(",")})`; };
+    const dark = (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+    rows.forEach((r, ri) => {
+      svg.append(s("text", { class: "lab", x: left - 8, y: top + ri * cellH + cellH / 2 + 4, "text-anchor": "end" }, r));
+      cols.forEach((c, ci) => {
+        const v = values[ri][ci], x = left + ci * cw, y = top + ri * cellH;
+        svg.append(s("rect", { x: x + 1, y: y + 1, width: cw - 2, height: cellH - 2, rx: 3, fill: mix(lo, hi, v) }));
+        const strong = dark ? v < 0.55 : v > 0.55;
+        svg.append(s("text", { x: x + cw / 2, y: y + cellH / 2 + 4, "text-anchor": "middle", style: `fill:${strong ? "#ffffff" : "#0b0b0b"};font-size:12px` }, v.toFixed(2)));
+        const hit = s("rect", { x, y, width: cw, height: cellH, fill: "transparent" });
+        hit.addEventListener("mousemove", (ev) => showTip(ev, `${r} · ${c}`, [["success", v.toFixed(3)]]));
+        hit.addEventListener("mouseleave", hideTip);
+        svg.append(hit);
+      });
+    });
+    cols.forEach((c, ci) => svg.append(s("text", { class: "lab", x: left + ci * cw + cw / 2, y: H - 8, "text-anchor": "middle" }, c)));
+    el.append(svg);
+  }
+
+  // ---------- trade-off scatter
+  function scatter(el, atlas, base, height = 320) {
+    const { svg, width } = svgBox(el, height);
+    const left = 48, right = 20, top = 12, bottom = 40;
+    const xs = [...atlas, ...base].map((p) => p.cost), ys = [...atlas, ...base].map((p) => p.success);
+    const xlo = Math.floor(Math.min(...xs) * 2) / 2 - 0.25, xhi = Math.ceil(Math.max(...xs) * 2) / 2 + 0.25, ylo = Math.floor(Math.min(...ys) * 20) / 20 - 0.02, yhi = 0.92;
+    const X = (v) => left + ((v - xlo) / (xhi - xlo)) * (width - left - right), Y = (v) => top + (1 - (v - ylo) / (yhi - ylo)) * (height - top - bottom);
+    for (const tv of ticks(ylo, yhi, 4)) { svg.append(s("line", { x1: left, x2: width - right, y1: Y(tv), y2: Y(tv), stroke: css("--grid") })); svg.append(s("text", { x: left - 6, y: Y(tv) + 4, "text-anchor": "end" }, +tv.toFixed(2))); }
+    for (const tv of ticks(xlo, xhi, 5)) svg.append(s("text", { x: X(tv), y: height - bottom + 16, "text-anchor": "middle" }, +tv.toFixed(2)));
+    svg.append(s("text", { x: left + (width - left - right) / 2, y: height - 4, "text-anchor": "middle" }, "Cost per successful task (m$) — lower is better"));
+    svg.append(s("path", { d: atlas.map((p, i) => `${i ? "L" : "M"}${X(p.cost)},${Y(p.success)}`).join(""), fill: "none", stroke: css("--series-1"), "stroke-width": 2 }));
+    const dot = (p, color, label, rows, anchor) => {
+      svg.append(s("circle", { cx: X(p.cost), cy: Y(p.success), r: 6, fill: color, stroke: css("--surface-1"), "stroke-width": 2 }));
+      svg.append(s("text", { class: "lab", x: X(p.cost) + (anchor === "end" ? -10 : 10), y: Y(p.success) - 8, "text-anchor": anchor || "start" }, label));
+      const hit = s("circle", { cx: X(p.cost), cy: Y(p.success), r: 14, fill: "transparent" });
+      hit.addEventListener("mousemove", (ev) => showTip(ev, label, rows)); hit.addEventListener("mouseleave", hideTip); svg.append(hit);
+    };
+    atlas.forEach((p) => dot(p, css("--series-1"), `ATLAS Qmin ${p.q}`, [["success", f3(p.success), css("--series-1")], ["cost / success", f2(p.cost) + " m$"]], "end"));
+    base.forEach((p) => dot(p, css("--neutral"), p.name, [["success", f3(p.success), css("--neutral")], ["cost / success", f2(p.cost) + " m$"]]));
+    el.append(svg);
+  }
+
+  // =================================================================== page
+  const D = DATA;
+  let state = { exp: "E2", metric: "success" };
+  function renderAll() {
+    hideTip();
+    const main = document.getElementById("main");
+    main.replaceChildren();
+    const ATL = css("--series-1"), NEU = css("--neutral");
+
+    // ---- tiles
+    const e1 = D.comparison.E1.success, e2 = D.comparison.E2.success, lv = D.live.routers;
+    const bestBase = (o) => Object.entries(o).filter(([k]) => !["ATLAS", "Oracle"].includes(k)).sort((a, b) => b[1].mean - a[1].mean)[0];
+    const [b1n, b1] = bestBase(e1), [b2n, b2] = bestBase(e2);
+    const liveBase = Object.entries(lv).filter(([k]) => !k.startsWith("ATLAS")).sort((a, b) => b[1].success.mean - a[1].success.mean)[0];
+    main.append(h("div", { class: "tiles" },
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(e1.ATLAS.mean)), h("div", { class: "l" }, "ATLAS success, stable tools (E1)"), h("div", { class: "d" }, `best baseline ${b1n}: ${f3(b1.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(e2.ATLAS.mean)), h("div", { class: "l" }, "ATLAS success under drift (E2)"), h("div", { class: "d" }, `best baseline ${b2n}: ${f3(b2.mean)} · Oracle ${f3(e2.Oracle.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(lv.ATLAS.success.mean)), h("div", { class: "l" }, `ATLAS success on real tools (${D.live.seeds} seeds)`), h("div", { class: "d" }, `best baseline ${liveBase[0]}: ${f3(liveBase[1].success.mean)}`)),
+      h("div", { class: "tile" }, h("div", { class: "v" }, f3(lv.ATLAS.incident.mean)), h("div", { class: "l" }, "…during the live database incident"), h("div", { class: "d" }, `${liveBase[0]}: ${f3(liveBase[1].incident.mean)}`)),
+    ));
+
+    // ---- router comparison with filters
+    {
+      const c = card("How every router compares", `Mean over ${D.meta.seeds} seeds with 95% bootstrap CI. ATLAS highlighted; the Oracle knows true requirements and current tool parameters.`, true);
+      const segExp = h("span", { class: "seg", role: "group", "aria-label": "Experiment" }, [["E1", "E1 stable tools"], ["E2", "E2 drift"]].map(([k, l]) =>
+        h("button", { "aria-pressed": String(state.exp === k), onclick: () => { state.exp = k; renderAll(); } }, l)));
+      const sel = h("select", { "aria-label": "Metric", onchange: (e) => { state.metric = e.target.value; renderAll(); } },
+        Object.entries(D.metrics).map(([k, l]) => { const o = h("option", { value: k }, l); if (k === state.metric) o.selected = true; return o; }));
+      c.append(h("div", { class: "filters" }, "Experiment", segExp, "Metric", sel));
+      const m = D.comparison[state.exp][state.metric], better = state.metric === "success" ? -1 : 1;
+      const rows = Object.entries(m).sort((a, b) => better * (a[1].mean - b[1].mean)).map(([k, v]) => ({
+        label: k, value: v.mean, lo: v.lo, hi: v.hi, color: k === "ATLAS" ? ATL : k === "Oracle" ? css("--neutral-2") : NEU }));
+      const fmt = state.metric.startsWith("latency") ? f0 : state.metric === "success" ? f3 : f2;
+      const el = h("div", { class: "chart" }); c.append(el);
+      barsH(el, rows, { fmt, label: D.metrics[state.metric], domain: state.metric === "success" ? [0, 1] : undefined });
+      c.append(h("div", { class: "note" }, state.metric === "success" ? "Higher is better." : "Lower is better. Sorted best first."));
+      c.append(table(["Router", "Mean", "CI low", "CI high"], rows.map((r) => [r.label, fmt(r.value), fmt(r.lo), fmt(r.hi)])));
+    }
+
+    // ---- drift timeline
+    {
+      const c = card("Under drift, ATLAS stays near the oracle", "Rolling task success (window 100) over the 3000-task E2 stream, mean of seeds. Dashed verticals mark drift events.", true);
+      const order = ["ATLAS", "B4 Static", "B5 Bandit", "B2 Supervised"], cols = [ATL, css("--series-2"), css("--series-3"), css("--series-4")];
+      const series = order.map((n, i) => ({ name: n, values: D.curves[n], color: cols[i], emph: n === "ATLAS" }));
+      series.push({ name: "Oracle", values: D.curves.Oracle, color: css("--neutral"), dash: true });
+      c.append(legend(series.map((sr) => [sr.name, sr.color, true, sr.dash])));
+      const xs = D.curves.ATLAS.map((_, i) => i * 25 + 100);
+      const el = h("div", { class: "chart" }); c.append(el);
+      lines(el, series, { xs, xfmt: (x) => "task " + f0(x), ydomain: [0.4, 1.0], vlines: D.drifts.map((d) => ({ x: d.t })), xLabel: "Task index" });
+      c.append(h("div", { class: "note" }, D.drifts.map((d, i) => `${i + 1}: t=${d.t} ${d.label}`).join(" · ")));
+      c.append(table(["Task", ...series.map((s) => s.name)], xs.filter((_, i) => i % 10 === 0).map((x, j) => [f0(x), ...series.map((s) => f3(s.values[j * 10]))])));
+    }
+
+    // ---- trade-off
+    {
+      const c = card("The quality target sets the cost trade-off", "Under drift. ATLAS at four quality targets (Qmin) vs the learned baselines. Up and left is better.");
+      c.append(legend([["ATLAS (Qmin 0.6 → 0.9)", ATL], ["Baselines", NEU]]));
+      const el = h("div", { class: "chart" }); c.append(el);
+      scatter(el, D.tradeoff.atlas, D.tradeoff.baselines);
+      c.append(h("div", { class: "note" }, "At the default Qmin 0.8 ATLAS costs about the same per success as B2/B5; at 0.6–0.7 it beats them on both axes (points chosen after the sweep)."));
+      c.append(table(["Point", "Success", "Cost / success (m$)"], [...D.tradeoff.atlas.map((p) => [`ATLAS Qmin ${p.q}`, f3(p.success), f2(p.cost)]), ...D.tradeoff.baselines.map((p) => [p.name, f3(p.success), f2(p.cost)])]));
+    }
+
+    // ---- ablations
+    {
+      const c = card("Plan structure does most of the work", "Success lost when one component is removed (E3, drift, paired over seeds). Negative = removing it raised success but cost more.");
+      c.append(legend([["Component adds success", css("--pos")], ["Trade-off: saves cost", css("--neg")]]));
+      const rows = D.ablations.map((a) => ({ label: a.name, value: a.delta.mean, lo: a.delta.lo, hi: a.delta.hi, color: a.delta.mean >= 0 ? css("--pos") : css("--neg"),
+        extra: [["cost / success change if removed", (a.cost_saved >= 0 ? "+" : "") + f2(a.cost_saved) + " m$"]] }));
+      const el = h("div", { class: "chart" }); c.append(el);
+      barsH(el, rows, { fmt: (x) => (x >= 0 ? "+" : "") + f3(x), label: "Δ success" });
+      c.append(table(["Removed", "Δ success", "CI", "Δ cost / success if removed"], D.ablations.map((a) => [a.name, f3(a.delta.mean), `${f3(a.delta.lo)} – ${f3(a.delta.hi)}`, f2(a.cost_saved)])));
+    }
+
+    // ---- scaling (two charts, never a dual axis)
+    {
+      const c = card("Scaling: accuracy falls with hundreds of look-alike tools", "E4: distractor tools added to the 12-tool registry (5 seeds, 600 tasks). Unsolved — see README.", true);
+      const names = ["ATLAS", "B5 Bandit", "B3 Retrieval"], cols = [ATL, css("--series-3"), css("--series-4")];
+      const xs = D.scaling.ATLAS.map((p) => p.tools);
+      c.append(legend(names.map((n, i) => [n, cols[i], true])));
+      const wrap = h("div", { style: "display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px" });
+      const a = h("div", { class: "chart" }), b = h("div", { class: "chart" });
+      wrap.append(h("div", {}, h("div", { class: "sub" }, "Task success"), a), h("div", {}, h("div", { class: "sub" }, "Planning time p95 (ms)"), b));
+      c.append(wrap);
+      lines(a, names.map((n, i) => ({ name: n, values: D.scaling[n].map((p) => p.success), color: cols[i], markers: true, emph: n === "ATLAS" })), { xs, ylog: true, xfmt: (x) => x + " tools", ydomain: [0, 1], height: 260, xLabel: "Registry size (log scale)" });
+      lines(b, names.map((n, i) => ({ name: n, values: D.scaling[n].map((p) => p.p95), color: cols[i], markers: true, emph: n === "ATLAS" })), { xs, ylog: true, xfmt: (x) => x + " tools", yfmt: f2, ydomain: [0, Math.ceil(Math.max(...names.flatMap((n) => D.scaling[n].map((p) => p.p95))) / 5) * 5], height: 260, xLabel: "Registry size (log scale)" });
+      c.append(table(["Tools", ...names.map((n) => n + " success"), ...names.map((n) => n + " p95 ms")], xs.map((x, i) => [x, ...names.map((n) => f3(D.scaling[n][i].success)), ...names.map((n) => f2(D.scaling[n][i].p95))])));
+    }
+
+    // ---- live
+    {
+      const c = card("Real tools: ATLAS routes around a database incident", `Live evaluation, ${D.live.seeds} seeds × 400 tasks; real SQLite, retrieval, log scan and Python sandbox, with injected faults.`);
+      const names = Object.keys(D.live.routers).filter((n) => n !== "ATLAS v1");
+      const sorted = names.sort((a, b) => D.live.routers[a].success.mean - D.live.routers[b].success.mean);
+      const series = [{ name: "Overall success", values: sorted.map((n) => D.live.routers[n].success.mean), color: ATL }, { name: "During DB incident", values: sorted.map((n) => D.live.routers[n].incident.mean), color: css("--series-2") }];
+      c.append(legend(series.map((sr) => [sr.name, sr.color])));
+      const el = h("div", { class: "chart" }); c.append(el);
+      grouped(el, sorted, series);
+      c.append(table(["Router", "Success", "CI", "During incident", "Cost / success (m$)"], sorted.map((n) => { const r = D.live.routers[n]; return [n, f3(r.success.mean), `${f3(r.success.lo)} – ${f3(r.success.hi)}`, f3(r.incident.mean), f2(r.cost)]; })));
+    }
+    {
+      const c = card("Live success by question type", "Darker = higher success. B5 cannot plan SQL → compute, so it fails every calculation question.");
+      const names = Object.keys(D.live.routers).filter((n) => n !== "ATLAS v1");
+      const el = h("div", { class: "chart" }); c.append(el);
+      heatmap(el, names, D.live.families, names.map((n) => D.live.routers[n].family));
+      c.append(table(["Router", ...D.live.families], names.map((n) => [n, ...D.live.routers[n].family.map(f3)])));
+    }
+
+    // ---- understanding
+    {
+      const c = card("The lead holds at every level of query understanding", "E6: same simulator and routers, understanding stage swapped (5 seeds × 400 tasks). A small local LLM is the weakest option.", true);
+      const names = ["ATLAS", "B4 Static", "B5 Bandit"], cols = [ATL, css("--series-2"), css("--series-3")];
+      const series = names.map((n, i) => ({ name: n, values: D.understanding.routers[n], color: cols[i], markers: true, emph: n === "ATLAS" }));
+      c.append(legend(series.map((sr) => [sr.name, sr.color, true])));
+      const xs = D.understanding.levels.map((l, i) => `${l} (acc ${D.understanding.accuracy[i].toFixed(2)})`);
+      const el = h("div", { class: "chart" }); c.append(el);
+      lines(el, series, { xs, xcats: true, ydomain: [0.4, 1.0], height: 280 });
+      c.append(table(["Understanding", "Exact-set accuracy", ...names], D.understanding.levels.map((l, i) => [l, f2(D.understanding.accuracy[i]), ...names.map((n) => f3(D.understanding.routers[n][i]))])));
+    }
+  }
+  renderAll();
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 150); });
+})();
+</script>
+</body>
+</html>

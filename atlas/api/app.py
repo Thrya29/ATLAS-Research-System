@@ -9,6 +9,7 @@ Endpoints
   POST /v1/execute         plan + execute + evidence
   POST /v1/feedback        answer-quality feedback for a previous request
   GET  /v1/stats           learned per-tool estimates and circuit states (admin)
+  GET  /ui                 interactive demo page (uses the endpoints above with the caller's API key)
 
 Authentication: ``X-API-Key`` mapped to a role via ATLAS_API_KEYS="key:role,...".
 Every decision is written to the audit log with its request id.
@@ -26,6 +27,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import HTMLResponse
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 from pydantic import BaseModel, Field
 
@@ -164,6 +166,7 @@ def _report_json(r: ExecutionReport) -> dict:
             }
             for x in r.results
         ],
+        "steps": [{"tool": s.tool, "purpose": s.purpose, "supplies": sorted(s.supplies)} for s in r.steps],
         "evidence": {t: {"tool": x.tool, "confidence": x.confidence, "output": x.output} for t, x in r.supplied.items()},
     }
 
@@ -185,6 +188,15 @@ def _audit(event: str, d: Decision, role: str, **extra) -> None:
             }
         )
     )
+
+
+UI_PAGE = Path(__file__).with_name("static") / "ui.html"
+
+
+@app.get("/ui", include_in_schema=False)
+async def ui() -> HTMLResponse:
+    # Static page; every data call it makes is authenticated with the user's API key.
+    return HTMLResponse(UI_PAGE.read_text(encoding="utf-8"))
 
 
 @app.get("/healthz")

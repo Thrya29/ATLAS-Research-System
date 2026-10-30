@@ -13,6 +13,7 @@ Every response carries `X-Request-ID` (the client may supply it). Interactive Op
 | POST | `/v1/execute` | Plan, execute and return the evidence |
 | POST | `/v1/feedback` | Report whether the answer for `request_id` was correct |
 | GET | `/v1/stats` | Learned per-tool estimates and circuit states (admin) |
+| GET | `/ui` | Interactive console: plan, run, inspect and give feedback in a browser (calls the endpoints above with your API key) |
 
 ## Example
 

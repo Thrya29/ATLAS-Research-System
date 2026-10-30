@@ -127,6 +127,23 @@ seeds, before the 20-seed rerun.
 * **External validity.** Simulator parameters are hand-specified. The live world is generated, and its latency and
   faults are injected; tool outputs and execution are real. None of this is a production traffic measurement.
 
+## See it
+
+* **Results dashboard.** Open [`benchmarks/reports/dashboard.html`](benchmarks/reports/dashboard.html) in a browser. It is
+  one self-contained page with every experiment as an interactive chart (hover for values, table view per chart). It
+  works offline. Regenerate it with `python -m benchmarks.experiments.dashboard`.
+* **Live router console.** Start the service (below) and open **http://localhost:8000/ui** (API key `dev-key`). Type
+  a question and watch each step:
+  1. what ATLAS understood;
+  2. the candidate and rejected tools;
+  3. the plan and its predicted cost and risk;
+  4. every real tool call, including verification and fallback;
+  5. the evidence returned.
+
+  Mark answers correct or wrong to teach it, and watch its learned per-tool estimates change. Demo links work too, for
+  example `/ui?q=Explain%20TCP&run=1`.
+* **Slides:** [`docs/ATLAS_slides.pptx`](docs/ATLAS_slides.pptx).
+
 ## Quick start
 
 ```bash
@@ -134,7 +151,7 @@ python -m venv .venv && . .venv/bin/activate          # Windows: .venv\Scripts\a
 pip install -e ".[dev,langchain]"
 pytest -q                                              # 64 tests: unit, property, integration, API, LangGraph
 
-uvicorn atlas.api.app:app --port 8000                  # demo service (key: dev-key)
+uvicorn atlas.api.app:app --port 8000                  # service + console at localhost:8000/ui (key: dev-key)
 curl -s localhost:8000/v1/execute -H 'X-API-Key: dev-key' -H 'Content-Type: application/json' \
      -d '{"query": "Calculate the percentage change in revenue between Q1 and Q2"}'
 

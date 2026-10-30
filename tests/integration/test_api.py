@@ -49,6 +49,7 @@ def test_execute_and_feedback(client):
     )
     body = r.json()
     assert body["execution"]["evidence"]["numeric_result"]["output"] is not None
+    assert {st["purpose"] for st in body["execution"]["steps"]} <= {"primary", "verification", "fallback"}
     rid = body["decision"]["request_id"]
     assert client.post("/v1/feedback", headers=ANALYST, json={"request_id": rid, "success": True}).json() == {"accepted": True}
     assert client.post("/v1/feedback", headers=ANALYST, json={"request_id": rid, "success": True}).status_code == 404
@@ -71,3 +72,9 @@ def test_unknown_tool_arguments_rejected(client):
 
 def test_metrics_exposed(client):
     assert "atlas_decisions_total" in client.get("/metrics").text
+
+
+def test_ui_page_served_without_leaking_data(client):
+    r = client.get("/ui")
+    assert r.status_code == 200 and r.headers["content-type"].startswith("text/html")
+    assert "ATLAS Router Console" in r.text and "/v1/execute" in r.text
